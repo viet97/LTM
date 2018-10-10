@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">LTM</string>
+    <string name="username_login_placeholder">Tài khoản</string>
+    <string name="password_login_placeholder">Mật khẩu</string>
+    <string name="login_button">Đăng nhập</string>
+    <string name="login_success_button">Success</string>
+    <string name="login_error_button">Error</string>
+    <string name="register_text_button">Bạn chưa có tài khoản? Đăng ký ngay</string>
 </resources>
