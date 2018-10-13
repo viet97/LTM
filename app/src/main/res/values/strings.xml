@@ -6,4 +6,10 @@
     <string name="login_success_button">Success</string>
     <string name="login_error_button">Error</string>
     <string name="register_text_button">Bạn chưa có tài khoản? Đăng ký ngay</string>
+    <string name="home_tab">Trang chủ</string>
+    <string name="notification_tab">Thông báo</string>
+    <string name="friend_tab">Bạn bè</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
