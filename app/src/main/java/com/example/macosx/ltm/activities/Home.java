@@ -36,6 +36,7 @@ public class Home extends AppCompatActivity {
         moveTabScreens(BottomNavigationTabType.HOMETAB);
 
         bottomTabar =  findViewById(R.id.bottom_navigation);
+
         // Create items
 //        AHBottomNavigationItem homeTab = new AHBottomNavigationItem(R.string.home_tab, R.drawable.home, R.color.white);
 //        AHBottomNavigationItem notificationTab = new AHBottomNavigationItem(R.string.notification_tab, R.drawable.home, R.color.white);
@@ -90,10 +91,11 @@ public class Home extends AppCompatActivity {
 //                Log.d(TAG, "onPositionChange: "+y);
 //            }
 //        });
+
         bottomTabar
-                .addItem(new BottomNavigationItem(R.drawable.home, "Trang chủ")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
-                .addItem(new BottomNavigationItem(R.drawable.home, "Thông báo")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
-                .addItem(new BottomNavigationItem(R.drawable.home, "Bạn bè")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
+                .addItem(new BottomNavigationItem(R.drawable.home, "123123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
+                .addItem(new BottomNavigationItem(R.drawable.home, "123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
+                .addItem(new BottomNavigationItem(R.drawable.home, "123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
                 .initialise();
 
         bottomTabar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
