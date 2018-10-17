@@ -1,18 +1,16 @@
 package com.example.macosx.ltm.adapters;
 
-import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.macosx.ltm.R;
-import com.example.macosx.ltm.models.Post;
+import com.example.macosx.ltm.database.models.Post;
 
 import java.util.ArrayList;
 

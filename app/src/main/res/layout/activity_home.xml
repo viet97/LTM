@@ -5,7 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.Home">
-    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+    <View
+        android:layout_marginHorizontal="8dp"
+        android:id="@+id/under_content_line"
+        android:layout_above="@id/bottom_navigation"
+        android:background="@color/gray"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"/>
+    <com.ashokvarma.bottomnavigation.BottomNavigationBar
         android:layout_alignParentBottom="true"
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -14,7 +21,7 @@
         android:id="@+id/content_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation">
+        android:layout_above="@id/under_content_line">
 
     </FrameLayout>
 </RelativeLayout>

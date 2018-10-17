@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.macosx.ltm.R;
 import com.example.macosx.ltm.adapters.ListPostAdapter;
-import com.example.macosx.ltm.models.Post;
+import com.example.macosx.ltm.database.models.Post;
 
 import java.util.ArrayList;
 
