@@ -4,11 +4,17 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.adapters.ListPostAdapter;
+import com.example.macosx.ltm.models.Post;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,61 +25,43 @@ import com.example.macosx.ltm.R;
  * create an instance of this fragment.
  */
 public class HomeTab extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    public HomeTab() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeTab.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeTab newInstance(String param1, String param2) {
-        HomeTab fragment = new HomeTab();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    private RecyclerView listPost;
+    private ArrayList<Post> listPostData;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+    }
+
+    private void setupUI(View view) {
+        listPostData = new ArrayList<>();
+        Post post1 = new Post(1,"1","Quoc Viet Dang","12:32:11","chan qua",12,32);
+        Post post2 = new Post(2,"2","Vuong Van huy","04:52:11","chan qua",3,16);
+        Post post3 = new Post(3,"3","Do Trung Thanh","01:22:14","chan qua",5,8);
+        Post post4 = new Post(4,"4","Le Thanh Minh","03:32:33","chan qua",1,9);
+        listPostData.add(post1);
+        listPostData.add(post2);
+        listPostData.add(post3);
+        listPostData.add(post4);
+        listPost = view.findViewById(R.id.list_post);
+        listPost.hasFixedSize();
+        listPost.setAdapter(new ListPostAdapter(listPostData));
+        listPost.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home_tab, container, false);
+        View view =  inflater.inflate(R.layout.fragment_home_tab, container, false);
+        setupUI(view);
+        return view;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
 
     @Override
     public void onAttach(Context context) {
@@ -89,7 +77,6 @@ public class HomeTab extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     /**

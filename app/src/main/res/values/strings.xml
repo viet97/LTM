@@ -9,7 +9,7 @@
     <string name="home_tab">Trang chủ</string>
     <string name="notification_tab">Thông báo</string>
     <string name="friend_tab">Bạn bè</string>
+    <string name="like_button_text">Thích</string>
+    <string name="comment_button_text">Bình Luận</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
