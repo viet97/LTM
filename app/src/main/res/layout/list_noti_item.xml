@@ -6,8 +6,8 @@
         android:layout_marginLeft="8dp"
         android:src="@drawable/avatar"
         android:id="@+id/avatar"
-        android:layout_width="96dp"
-        android:layout_height="96dp" />
+        android:layout_width="84dp"
+        android:layout_height="84dp" />
     <LinearLayout
         android:gravity="center_vertical"
         android:orientation="vertical"
@@ -15,7 +15,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="8dp"
         android:layout_width="match_parent"
-        android:layout_height="96dp">
+        android:layout_height="84dp">
         <TextView
 
             android:textColor="@color/black"

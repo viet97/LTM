@@ -11,5 +11,8 @@
     <string name="friend_tab">Bạn bè</string>
     <string name="like_button_text">Thích</string>
     <string name="comment_button_text">Bình Luận</string>
+    <string name="status_post_hint">Hôm nay bạn thế nào?</string>
+    <string name="status_post_title">Đăng bài</string>
+    <string name="status_post_screen_hint">Bạn đang nghỉ gì?</string>
 
 </resources>

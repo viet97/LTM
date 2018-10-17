@@ -18,7 +18,7 @@
                android:src="@drawable/background_avatar"
                android:scaleType="fitXY"
                android:layout_width="match_parent"
-               android:layout_height="200dp" />
+               android:layout_height="160dp" />
            <de.hdodenhof.circleimageview.CircleImageView
                xmlns:app="http://schemas.android.com/apk/res-auto"
                android:id="@+id/avatar"
@@ -46,9 +46,29 @@
                android:layout_centerHorizontal="true"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content" />
+           <EditText
+               android:focusable="false"
+               android:layout_marginHorizontal="16dp"
+               android:layout_marginTop="8dp"
+               android:layout_marginBottom="4dp"
+               android:paddingLeft="16dp"
+               android:textSize="16sp"
+               android:hint="@string/status_post_hint"
+               android:id="@+id/status_post"
+               android:layout_below="@id/background_avatar"
+               android:background="@drawable/background_status_post"
+               android:layout_width="match_parent"
+               android:layout_height="52dp" />
+            <ImageView
+                android:layout_alignTop="@id/status_post"
+                android:layout_alignRight="@id/status_post"
+                android:src="@drawable/right_arrow"
+                android:padding="18dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
            <android.support.v7.widget.RecyclerView
                android:id="@+id/list_post"
-               android:layout_below="@id/background_avatar"
+               android:layout_below="@id/status_post"
                android:layout_width="match_parent"
                android:layout_height="match_parent">
 

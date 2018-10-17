@@ -1,18 +1,25 @@
 package com.example.macosx.ltm.fragments.tab;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.activities.PostStatus;
 import com.example.macosx.ltm.adapters.ListPostAdapter;
 import com.example.macosx.ltm.database.models.Post;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -25,15 +32,18 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class HomeTab extends Fragment {
+    private static final String TAG = "HomeTab";
     private RecyclerView listPost;
     private ArrayList<Post> listPostData;
+    EditText statusPost;
+    TextView pickImage;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
-    private void setupUI(View view) {
+    private void setupUI(final View view) {
         listPostData = new ArrayList<>();
         Post post1 = new Post(1,"1","Quoc Viet Dang","12:32:11","chan qua",12,32);
         Post post2 = new Post(2,"2","Vuong Van huy","04:52:11","chan qua",3,16);
@@ -47,6 +57,15 @@ public class HomeTab extends Fragment {
         listPost.hasFixedSize();
         listPost.setAdapter(new ListPostAdapter(listPostData));
         listPost.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        statusPost = view.findViewById(R.id.status_post);
+        statusPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                view.getContext().startActivity(new Intent(view.getContext(),PostStatus.class));
+            }
+        });
+
 
     }
 

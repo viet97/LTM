@@ -9,9 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activities.Login">
-
-        </activity>
+        <activity android:name=".activities.Login"></activity>
         <activity android:name=".activities.Splash" />
         <activity android:name=".activities.Home">
             <intent-filter>
@@ -20,6 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.PostStatus"></activity>
     </application>
 
 </manifest>

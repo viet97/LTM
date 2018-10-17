@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.Home">
     <View
-        android:layout_marginHorizontal="8dp"
         android:id="@+id/under_content_line"
         android:layout_above="@id/bottom_navigation"
         android:background="@color/gray"

@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -23,6 +25,7 @@ import com.example.macosx.ltm.fragments.tab.NotificationTab;
 public class Home extends AppCompatActivity {
     BottomNavigationBar bottomTabar;
     FrameLayout contentView;
+
     private static final String TAG = "HOME";
 
     @Override
@@ -32,6 +35,8 @@ public class Home extends AppCompatActivity {
         setupUI();
     }
     private void setupUI(){
+
+
         contentView = findViewById(R.id.content_view);
         moveTabScreens(BottomNavigationTabType.HOMETAB);
 
@@ -94,8 +99,8 @@ public class Home extends AppCompatActivity {
 
         bottomTabar
                 .addItem(new BottomNavigationItem(R.drawable.home, "123123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
-                .addItem(new BottomNavigationItem(R.drawable.home, "123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
-                .addItem(new BottomNavigationItem(R.drawable.home, "123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
+                .addItem(new BottomNavigationItem(R.drawable.notification, "123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
+                .addItem(new BottomNavigationItem(R.drawable.friend, "123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
                 .initialise();
 
         bottomTabar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
