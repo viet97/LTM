@@ -1,14 +1,30 @@
 package com.example.macosx.ltm.fragments.tab;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.adapters.ListFriendAdapter;
+import com.example.macosx.ltm.database.DbContext;
+import com.example.macosx.ltm.database.models.User;
+import com.example.macosx.ltm.network.NetworkManager;
+import com.example.macosx.ltm.network.api.FriendService;
+import com.example.macosx.ltm.network.response.FriendResponse;
+import com.example.macosx.ltm.ultils.Dialog;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,13 +35,15 @@ import com.example.macosx.ltm.R;
  * create an instance of this fragment.
  */
 public class FriendTab extends Fragment {
+    private static final String TAG = "FRIENDTAB";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
+    RecyclerView listFriends;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d(TAG, "onCreate: ");
     }
 
     @Override
@@ -33,8 +51,38 @@ public class FriendTab extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friend_tab, container, false);
+        listFriends = view.findViewById(R.id.rv_list_friends);
+        listFriends.setAdapter(new ListFriendAdapter());
+        listFriends.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        listFriends.setHasFixedSize(true);
+        Log.d(TAG, "onCreateView: ");
+        getFriends(view.getContext());
         return view;
 
+    }
+
+    private void getFriends(final Context context) {
+        FriendService friendService = NetworkManager.getInstance().create(FriendService.class);
+        String url = "friends?id="+DbContext.getInstance().getCurrentUser().getId();
+        friendService.getAllFriends(url).enqueue(new Callback<FriendResponse>() {
+            @Override
+            public void onResponse(Call<FriendResponse> call, Response<FriendResponse> response) {
+                FriendResponse friendResponse = response.body();
+                if (friendResponse.getErrorCode().equals("0")) {
+                    DbContext.getInstance().setListFriends(friendResponse.getListFriends());
+                    listFriends.getAdapter().notifyDataSetChanged();
+
+                }else{
+                    Dialog.instance.showMessageDialog(context,context.getString(R.string.error),friendResponse.getMsg());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FriendResponse> call, Throwable throwable) {
+                Dialog.instance.showMessageDialog(context,context.getString(R.string.error),context.getString(R.string.failur_message));
+
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

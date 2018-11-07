@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.network.NetworkManager;
 import com.example.macosx.ltm.network.api.LoginService;
 import com.example.macosx.ltm.network.response.LoginResponse;
@@ -61,6 +62,7 @@ public class Login extends Activity implements View.OnClickListener {
                         public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                             LoginResponse loginResponse = response.body();
                             if (loginResponse.getErrorCode().equals("0")){
+                                DbContext.getInstance().setCurrentUser(loginResponse.getUser());
                                 handle1.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {

@@ -21,6 +21,9 @@ public class User {
         this.lastUpdateTime = lastUpdateTime;
     }
 
+    public User() {
+    }
+
     public int getId() {
         return id;
     }

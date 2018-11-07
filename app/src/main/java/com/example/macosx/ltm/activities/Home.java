@@ -1,10 +1,14 @@
 package com.example.macosx.ltm.activities;
 
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +17,7 @@ import android.widget.FrameLayout;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+
 import com.example.macosx.ltm.R;
 import com.example.macosx.ltm.fragments.tab.BottomNavigationTabType;
 import com.example.macosx.ltm.fragments.tab.FriendTab;
@@ -22,10 +25,10 @@ import com.example.macosx.ltm.fragments.tab.HomeTab;
 import com.example.macosx.ltm.fragments.tab.NotificationTab;
 
 
-public class Home extends AppCompatActivity {
+public class Home extends Activity {
     BottomNavigationBar bottomTabar;
     FrameLayout contentView;
-
+    BottomNavigationTabType currentTab = BottomNavigationTabType.HOMETAB;
     private static final String TAG = "HOME";
 
     @Override
@@ -134,18 +137,40 @@ public class Home extends AppCompatActivity {
         Fragment fragment;
         switch (tabType){
             case HOMETAB:
+                currentTab = BottomNavigationTabType.HOMETAB;
                 fragment = new HomeTab();
                 break;
             case NOTIFICATIONTAB:
+                currentTab = BottomNavigationTabType.NOTIFICATIONTAB;
                 fragment = new NotificationTab();
                 break;
             default:
+                currentTab = BottomNavigationTabType.FRIENDTAB;
                 fragment = new FriendTab();
                 break;
         }
 
         Log.d(TAG, "moveTabScreens: "+fragment);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.content_view,fragment).commit();
     }
+
+    @Override
+    public void onBackPressed() {
+
+        if (currentTab != BottomNavigationTabType.HOMETAB){
+            bottomTabar.selectTab(0);
+        }else {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.logout_dialog_title))
+                    .setMessage(getString(R.string.logout_dialog_message))
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Home.super.onBackPressed();
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
+        }
+    }
+
 }
