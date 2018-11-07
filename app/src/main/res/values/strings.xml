@@ -14,5 +14,8 @@
     <string name="status_post_hint">Hôm nay bạn thế nào?</string>
     <string name="status_post_title">Đăng bài</string>
     <string name="status_post_screen_hint">Bạn đang nghỉ gì?</string>
+    <string name="error">Lỗi</string>
+    <string name="failur_message">Vui lòng kiểm tra lại đường truyền mạng hoặc liên hệ với quản trị viên.</string>
+    <string name="validate_login_message">Vui lòng nhập đầy đủ username và password.</string>
 
 </resources>
