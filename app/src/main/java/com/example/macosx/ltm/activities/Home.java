@@ -24,13 +24,17 @@ import com.example.macosx.ltm.fragments.tab.FriendTab;
 import com.example.macosx.ltm.fragments.tab.HomeTab;
 import com.example.macosx.ltm.fragments.tab.NotificationTab;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
 
 public class Home extends Activity {
-    BottomNavigationBar bottomTabar;
+    public BottomNavigationBar bottomTabar;
     FrameLayout contentView;
     BottomNavigationTabType currentTab = BottomNavigationTabType.HOMETAB;
     private static final String TAG = "HOME";
-
+    public static Home instance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,61 +48,6 @@ public class Home extends Activity {
         moveTabScreens(BottomNavigationTabType.HOMETAB);
 
         bottomTabar =  findViewById(R.id.bottom_navigation);
-
-        // Create items
-//        AHBottomNavigationItem homeTab = new AHBottomNavigationItem(R.string.home_tab, R.drawable.home, R.color.white);
-//        AHBottomNavigationItem notificationTab = new AHBottomNavigationItem(R.string.notification_tab, R.drawable.home, R.color.white);
-//        AHBottomNavigationItem friendsTab = new AHBottomNavigationItem(R.string.friend_tab, R.drawable.home, R.color.white);
-//
-//// Add items
-//        bottomTabar.addItem(homeTab);
-//        bottomTabar.addItem(notificationTab);
-//        bottomTabar.addItem(friendsTab);
-//
-//// Set background color
-////        bottomTabar.setDefaultBackgroundColor(Color.BLUE);
-//
-//// Disable the translation inside the CoordinatorLayout
-//        bottomTabar.setBehaviorTranslationEnabled(false);
-//
-////// Enable the translation of the FloatingActionButton
-////        bottomTabar.manageFloatingActionButtonBehavior(floatingActionButton);
-//
-//// Change colors
-//        bottomTabar.setAccentColor(Color.parseColor("#F63D2B"));
-//        bottomTabar.setInactiveColor(Color.parseColor("#747474"));
-//
-//        bottomTabar.setTranslucentNavigationEnabled(true);
-//
-//// Manage titles
-//        bottomTabar.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
-//
-//// Use colored navigation with circle reveal effect
-//        bottomTabar.setColored(true);
-//
-//        bottomTabar.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
-//            @Override
-//            public boolean onTabSelected(int position, boolean wasSelected) {
-//                Log.d(TAG, "onTabSelected: "+ position  + wasSelected);
-//                switch (position){
-//                    case 0:
-//                        moveTabScreens(BottomNavigationTabType.HOMETAB);
-//                        break;
-//                    case 1:
-//                        moveTabScreens(BottomNavigationTabType.NOTIFICATIONTAB);
-//                        break;
-//                    default:
-//                        moveTabScreens(BottomNavigationTabType.FRIENDTAB);
-//                        break;
-//                }
-//                return true;
-//            }
-//        });
-//        bottomTabar.setOnNavigationPositionListener(new AHBottomNavigation.OnNavigationPositionListener() {
-//            @Override public void onPositionChange(int y) {
-//                Log.d(TAG, "onPositionChange: "+y);
-//            }
-//        });
 
         bottomTabar
                 .addItem(new BottomNavigationItem(R.drawable.home, "123123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
@@ -153,6 +102,12 @@ public class Home extends Activity {
         Log.d(TAG, "moveTabScreens: "+fragment);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.content_view,fragment).commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        instance = this;
     }
 
     @Override

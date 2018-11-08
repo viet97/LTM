@@ -10,12 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.database.models.Post;
+import com.example.macosx.ltm.ultils.Ultils;
 
 import java.util.ArrayList;
 
 public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPostViewHolder> {
-    private ArrayList<Post> listPost;
     public class ListPostViewHolder extends RecyclerView.ViewHolder{
         private ImageView avatar;
         private TextView name;
@@ -37,9 +38,6 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
             commentCount =itemView.findViewById(R.id.comment_count);
         }
     }
-    public ListPostAdapter(ArrayList<Post> listPost){
-        this.listPost = listPost;
-    }
 
     @NonNull
     @Override
@@ -54,16 +52,19 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
 
     @Override
     public void onBindViewHolder(@NonNull ListPostViewHolder listPostViewHolder, int i) {
-        listPostViewHolder.name.setText(listPost.get(i).getName());
-        listPostViewHolder.time.setText(listPost.get(i).getTime());
-        listPostViewHolder.content.setText(listPost.get(i).getContent());
-        listPostViewHolder.likeCount.setText(String.valueOf( listPost.get(i).getLike()));
-        listPostViewHolder.commentCount.setText(String.valueOf( listPost.get(i).getComment()));
+        Post post = DbContext.getInstance().getListPosts().get(i);
+        String name =Ultils.instance.getNameOfPost(post.getUser_id_send());
+
+        listPostViewHolder.name.setText(name);
+        listPostViewHolder.time.setText(post.getCreate_time());
+        listPostViewHolder.content.setText(post.getContent());
+        listPostViewHolder.likeCount.setText(String.valueOf( post.getLike()));
+        listPostViewHolder.commentCount.setText(String.valueOf( post.getComment()));
     }
 
     @Override
     public int getItemCount() {
-        return listPost.size();
+        return DbContext.getInstance().getListPosts().size();
     }
 
 

@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.macosx.ltm.R;
 import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.database.models.Notification;
 import com.example.macosx.ltm.database.models.User;
+import com.example.macosx.ltm.fragments.tab.FriendTab;
 
 import org.w3c.dom.Text;
 
@@ -23,12 +25,14 @@ public class ListFriendAdapter extends RecyclerView.Adapter<ListFriendAdapter.Li
         private ImageView avatar;
         private ImageView online;
         private TextView name;
+        private RelativeLayout container;
 
         public ListFriendViewHolder(@NonNull View itemView) {
             super(itemView);
             avatar = itemView.findViewById(R.id.avatar);
             online = itemView.findViewById(R.id.online);
             name = itemView.findViewById(R.id.name);
+            container = itemView.findViewById(R.id.container);
         }
     }
 
@@ -41,14 +45,19 @@ public class ListFriendAdapter extends RecyclerView.Adapter<ListFriendAdapter.Li
 
     @Override
     public void onBindViewHolder(@NonNull ListFriendViewHolder listFriendViewHolder, int i) {
-            User friend = DbContext.getInstance().getListFriends().get(i);
+            final User friend = DbContext.getInstance().getListFriends().get(i);
             listFriendViewHolder.name.setText(friend.getName());
             if (friend.getStatus() == 1){
                 listFriendViewHolder.online.setVisibility(View.VISIBLE);
             }else{
                 listFriendViewHolder.online.setVisibility(View.INVISIBLE);
             }
-
+            listFriendViewHolder.container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FriendTab.instance.moveToFriendsWall(friend.getId());
+                }
+            });
 
 
     }

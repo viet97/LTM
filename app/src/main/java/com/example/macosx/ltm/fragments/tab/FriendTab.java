@@ -1,7 +1,9 @@
 package com.example.macosx.ltm.fragments.tab;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.activities.FriendWallActivity;
+import com.example.macosx.ltm.activities.Home;
 import com.example.macosx.ltm.adapters.ListFriendAdapter;
 import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.database.models.User;
@@ -35,10 +39,10 @@ import retrofit2.Response;
  * create an instance of this fragment.
  */
 public class FriendTab extends Fragment {
-    private static final String TAG = "FRIENDTAB";
+    private static  String TAG = "FRIENDTAB";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
+    public static FriendTab instance = new FriendTab();
     RecyclerView listFriends;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,17 @@ public class FriendTab extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        instance = this;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        instance = null;
+    }
     // TODO: Rename method, update argument and hook method into UI event
 
 
@@ -99,6 +114,11 @@ public class FriendTab extends Fragment {
 
     }
 
+    public void moveToFriendsWall(int id){
+        Intent intent = new Intent(this.getContext(),FriendWallActivity.class);
+        intent.putExtra("id",id);
+       startActivity(intent);
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

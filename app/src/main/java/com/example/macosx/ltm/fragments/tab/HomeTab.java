@@ -16,13 +16,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.activities.Home;
 import com.example.macosx.ltm.activities.PostStatus;
 import com.example.macosx.ltm.adapters.ListPostAdapter;
+import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.database.models.Post;
+import com.example.macosx.ltm.network.NetworkManager;
+import com.example.macosx.ltm.network.api.FriendService;
+import com.example.macosx.ltm.network.api.PostService;
+import com.example.macosx.ltm.network.response.FriendResponse;
+import com.example.macosx.ltm.network.response.PostResponse;
+import com.example.macosx.ltm.ultils.Dialog;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +45,9 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class HomeTab extends Fragment {
+    public int id = -1;
     private static final String TAG = "HomeTab";
+    public static HomeTab instance = new HomeTab();
     private RecyclerView listPost;
     private ArrayList<Post> listPostData;
     EditText statusPost;
@@ -46,17 +60,9 @@ public class HomeTab extends Fragment {
 
     private void setupUI(final View view) {
         listPostData = new ArrayList<>();
-        Post post1 = new Post(1,"1","Quoc Viet Dang","12:32:11","chan qua",12,32);
-        Post post2 = new Post(2,"2","Vuong Van huy","04:52:11","chan qua",3,16);
-        Post post3 = new Post(3,"3","Do Trung Thanh","01:22:14","chan qua",5,8);
-        Post post4 = new Post(4,"4","Le Thanh Minh","03:32:33","chan qua",1,9);
-        listPostData.add(post1);
-        listPostData.add(post2);
-        listPostData.add(post3);
-        listPostData.add(post4);
+
         listPost = view.findViewById(R.id.list_post);
-        listPost.hasFixedSize();
-        listPost.setAdapter(new ListPostAdapter(listPostData));
+        listPost.setAdapter(new ListPostAdapter());
         listPost.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         statusPost = view.findViewById(R.id.status_post);
@@ -66,8 +72,42 @@ public class HomeTab extends Fragment {
                 view.getContext().startActivity(new Intent(view.getContext(),PostStatus.class));
             }
         });
+        getAllPost(view.getContext(),id);
 
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        instance = this;
+    }
+
+    public void getAllPost(final Context context, int id ) {
+        if (id == -1){
+            id = DbContext.getInstance().getCurrentUser().getId();
+        }
+        PostService postService = NetworkManager.getInstance().create(PostService.class);
+        String url = "sends?id="+id;
+        postService.getAllPosts(url).enqueue(new Callback<PostResponse>() {
+            @Override
+            public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                PostResponse postResponse = response.body();
+                if (postResponse.getErrorCode().equals("0")) {
+                    DbContext.getInstance().setListPosts(postResponse.getPosts());
+                    listPost.getAdapter().notifyDataSetChanged();
+
+                }else{
+                    Dialog.instance.showMessageDialog(context,context.getString(R.string.error),postResponse.getMsg());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostResponse> call, Throwable t) {
+                Dialog.instance.showMessageDialog(context,context.getString(R.string.error),context.getString(R.string.failur_message));
+
+            }
+
+        });
     }
 
     @Override

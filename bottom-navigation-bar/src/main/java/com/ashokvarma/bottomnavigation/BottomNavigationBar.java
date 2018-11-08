@@ -228,6 +228,14 @@ public class BottomNavigationBar extends FrameLayout {
         setClipToPadding(false);
     }
 
+    public void setBottomTabarVisibility(boolean hideBottom) {
+        if (hideBottom){
+            this.mTabContainer.setVisibility(GONE);
+        }else{
+            this.mTabContainer.setVisibility(VISIBLE);
+        }
+    }
+
 //    @Override
 //    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 //        super.onMeasure(widthMeasureSpec, heightMeasureSpec);

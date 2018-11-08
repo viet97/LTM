@@ -30,11 +30,18 @@
             android:layout_height="wrap_content" />
     </RelativeLayout>
     <EditText
+        android:background="@color/white"
         android:paddingHorizontal="8dp"
         android:hint="@string/status_post_screen_hint"
         android:layout_below="@id/rl_title"
         android:id="@+id/content"
         android:layout_margin="4dp"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/post"
+        android:layout_below="@id/content"
+        android:text="Đăng bài"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>

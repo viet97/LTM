@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.macosx.ltm">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <application
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,11 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.Splash" />
-        <activity android:name=".activities.Home">
-
-        </activity>
-        <activity android:name=".activities.PostStatus"></activity>
-
+        <activity android:name=".activities.Home"></activity>
+        <activity android:name=".activities.PostStatus" />
+        <activity android:name=".activities.FriendWallActivity"></activity>
     </application>
 
 </manifest>

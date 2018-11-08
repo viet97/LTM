@@ -41,7 +41,7 @@ public class Login extends Activity implements View.OnClickListener {
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(this);
-
+        loginButton.callOnClick();
 
     }
 
@@ -50,14 +50,14 @@ public class Login extends Activity implements View.OnClickListener {
         int id = v.getId();
         switch (id){
             case R.id.login_button:
-                if (username.getText().toString().trim().equals("")|| username.getText().toString().trim().equals("")){
-                    com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(Login.this,getString(R.string.error),getString(R.string.validate_login_message));
-                }else{
+//                if (username.getText().toString().trim().equals("")|| username.getText().toString().trim().equals("")){
+//                    com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(Login.this,getString(R.string.error),getString(R.string.validate_login_message));
+//                }else{
                     loginButton.startAnimation();
                     final Handler handle1 = new Handler();
 
                     LoginService loginService = NetworkManager.getInstance().create(LoginService.class);
-                    loginService.login(username.getText().toString(),password.getText().toString()).enqueue(new Callback<LoginResponse>() {
+                    loginService.login("cuong","123456").enqueue(new Callback<LoginResponse>() {
                         @Override
                         public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                             LoginResponse loginResponse = response.body();
@@ -96,10 +96,11 @@ public class Login extends Activity implements View.OnClickListener {
                         public void onFailure(Call<LoginResponse> call, Throwable throwable) {
                             com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(Login.this,getString(R.string.error),getString(R.string.failur_message));
                             loginButton.revertAnimation();
+                            Log.d("Login", "onFailure: "+throwable.toString());
                         }
                     });
 
-                }
+//                }
 
 
                 break;
