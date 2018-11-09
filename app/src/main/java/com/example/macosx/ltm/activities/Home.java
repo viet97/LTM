@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 
 import android.os.Bundle;
@@ -126,6 +127,17 @@ public class Home extends Activity {
                         }})
                     .setNegativeButton(android.R.string.no, null).show();
         }
+    }
+
+    public void moveToDetailPost(int id,String name,String time,String content,int like,int comment){
+        Intent intent = new Intent(this,DetailPostActivity.class);
+        intent.putExtra("id",id);
+        intent.putExtra("name",name);
+        intent.putExtra("content",content);
+        intent.putExtra("time",time);
+        intent.putExtra("like",like);
+        intent.putExtra("comment",comment);
+        startActivity(intent);
     }
 
 }

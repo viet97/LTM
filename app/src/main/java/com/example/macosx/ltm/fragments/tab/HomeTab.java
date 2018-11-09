@@ -72,10 +72,35 @@ public class HomeTab extends Fragment {
                 view.getContext().startActivity(new Intent(view.getContext(),PostStatus.class));
             }
         });
+        getFriends(view.getContext());
         getAllPost(view.getContext(),id);
 
-    }
 
+    }
+    private void getFriends(final Context context) {
+        if (DbContext.getInstance().getListFriends().size() == 0) {
+            FriendService friendService = NetworkManager.getInstance().create(FriendService.class);
+            String url = "friends?id=" + DbContext.getInstance().getCurrentUser().getId();
+            friendService.getAllFriends(url).enqueue(new Callback<FriendResponse>() {
+                @Override
+                public void onResponse(Call<FriendResponse> call, Response<FriendResponse> response) {
+                    FriendResponse friendResponse = response.body();
+                    if (friendResponse.getErrorCode().equals("0")) {
+                        DbContext.getInstance().setListFriends(friendResponse.getListFriends());
+
+                    } else {
+                        Dialog.instance.showMessageDialog(context, context.getString(R.string.error), friendResponse.getMsg());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FriendResponse> call, Throwable throwable) {
+                    Dialog.instance.showMessageDialog(context, context.getString(R.string.error), context.getString(R.string.failur_message));
+
+                }
+            });
+        }
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -87,7 +112,7 @@ public class HomeTab extends Fragment {
             id = DbContext.getInstance().getCurrentUser().getId();
         }
         PostService postService = NetworkManager.getInstance().create(PostService.class);
-        String url = "sends?id="+id;
+        String url = "receive_posts?id="+id;
         postService.getAllPosts(url).enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {

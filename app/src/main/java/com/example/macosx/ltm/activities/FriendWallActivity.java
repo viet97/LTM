@@ -74,7 +74,7 @@ public class FriendWallActivity extends Activity {
     public void getAllPost( ) {
         id = Integer.parseInt(getIntent().getExtras().get("id").toString());
         PostService postService = NetworkManager.getInstance().create(PostService.class);
-        String url = "sends?id="+id;
+        String url = "receive_posts?id="+id;
         postService.getAllPosts(url).enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
@@ -95,5 +95,15 @@ public class FriendWallActivity extends Activity {
             }
 
         });
+    }
+    public void moveToDetailPost(int id,String name,String time,String content,int like,int comment){
+        Intent intent = new Intent(this,DetailPostActivity.class);
+        intent.putExtra("id",id);
+        intent.putExtra("name",name);
+        intent.putExtra("content",content);
+        intent.putExtra("time",time);
+        intent.putExtra("like",like);
+        intent.putExtra("comment",comment);
+        startActivity(intent);
     }
 }

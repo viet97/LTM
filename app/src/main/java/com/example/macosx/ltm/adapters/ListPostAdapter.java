@@ -7,9 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.activities.FriendWallActivity;
+import com.example.macosx.ltm.activities.Home;
 import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.database.models.Post;
 import com.example.macosx.ltm.ultils.Ultils;
@@ -26,6 +29,7 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
         private ImageButton comment;
         private TextView likeCount;
         private TextView commentCount;
+        private RelativeLayout container;
         public ListPostViewHolder(@NonNull View itemView) {
             super(itemView);
             avatar =itemView.findViewById(R.id.avatar);
@@ -36,6 +40,7 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
             comment =itemView.findViewById(R.id.comment);
             likeCount =itemView.findViewById(R.id.like_count);
             commentCount =itemView.findViewById(R.id.comment_count);
+            container =  itemView.findViewById(R.id.container);
         }
     }
 
@@ -52,14 +57,31 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
 
     @Override
     public void onBindViewHolder(@NonNull ListPostViewHolder listPostViewHolder, int i) {
-        Post post = DbContext.getInstance().getListPosts().get(i);
-        String name =Ultils.instance.getNameOfPost(post.getUser_id_send());
-
+        final Post post = DbContext.getInstance().getListPosts().get(i);
+        String namesend =Ultils.instance.getNameOfPost(post.getUser_id_send());
+        String namereceive =Ultils.instance.getNameOfPost(post.getUser_id_receive());
+        String name = "";
+        if (namesend.equals(namereceive)){
+            name = namesend;
+        }else{
+            name = namesend+ ">" + namereceive;
+        }
         listPostViewHolder.name.setText(name);
         listPostViewHolder.time.setText(post.getCreate_time());
         listPostViewHolder.content.setText(post.getContent());
         listPostViewHolder.likeCount.setText(String.valueOf( post.getLike()));
         listPostViewHolder.commentCount.setText(String.valueOf( post.getComment()));
+        final String finalName = name;
+        listPostViewHolder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (FriendWallActivity.instance!= null){
+                    FriendWallActivity.instance.moveToDetailPost(post.getId(), finalName,post.getCreate_time(),post.getContent(),post.getLike(),post.getComment());
+                }else{
+                    Home.instance.moveToDetailPost(post.getId(), finalName,post.getCreate_time(),post.getContent(),post.getLike(),post.getComment());
+                }
+            }
+        });
     }
 
     @Override

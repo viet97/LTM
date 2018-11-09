@@ -19,9 +19,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.Splash" />
-        <activity android:name=".activities.Home"></activity>
+        <activity android:name=".activities.Home" />
         <activity android:name=".activities.PostStatus" />
-        <activity android:name=".activities.FriendWallActivity"></activity>
+        <activity android:name=".activities.FriendWallActivity" />
+        <activity android:name=".activities.DetailPostActivity"></activity>
     </application>
 
 </manifest>
