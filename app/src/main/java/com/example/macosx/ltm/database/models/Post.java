@@ -6,22 +6,12 @@ public class Post {
     private String noti_content;
     private String create_time;
     private String content;
-    private int like;
-    private int comment;
+    private int like_count;
+    private int comment_count;
     private int user_id_send;
     private int user_id_receive;
 
-    public Post(int id, String image_url, String noti_content, String create_time, String content, int like, int comment, int user_id_send, int user_id_receive) {
-        this.id = id;
-        this.image_url = image_url;
-        this.noti_content = noti_content;
-        this.create_time = create_time;
-        this.content = content;
-        this.like = like;
-        this.comment = comment;
-        this.user_id_send = user_id_send;
-        this.user_id_receive = user_id_receive;
-    }
+
 
     public int getId() {
         return id;
@@ -63,20 +53,32 @@ public class Post {
         this.content = content;
     }
 
-    public int getLike() {
-        return like;
+    public Post(int id, String image_url, String noti_content, String create_time, String content, int like_count, int comment_count, int user_id_send, int user_id_receive) {
+        this.id = id;
+        this.image_url = image_url;
+        this.noti_content = noti_content;
+        this.create_time = create_time;
+        this.content = content;
+        this.like_count = like_count;
+        this.comment_count = comment_count;
+        this.user_id_send = user_id_send;
+        this.user_id_receive = user_id_receive;
     }
 
-    public void setLike(int like) {
-        this.like = like;
+    public int getLike_count() {
+        return like_count;
     }
 
-    public int getComment() {
-        return comment;
+    public void setLike_count(int like_count) {
+        this.like_count = like_count;
     }
 
-    public void setComment(int comment) {
-        this.comment = comment;
+    public int getComment_count() {
+        return comment_count;
+    }
+
+    public void setComment_count(int comment_count) {
+        this.comment_count = comment_count;
     }
 
     public int getUser_id_send() {

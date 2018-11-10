@@ -69,16 +69,16 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
         listPostViewHolder.name.setText(name);
         listPostViewHolder.time.setText(post.getCreate_time());
         listPostViewHolder.content.setText(post.getContent());
-        listPostViewHolder.likeCount.setText(String.valueOf( post.getLike()));
-        listPostViewHolder.commentCount.setText(String.valueOf( post.getComment()));
+        listPostViewHolder.likeCount.setText(String.valueOf( post.getLike_count()));
+        listPostViewHolder.commentCount.setText(String.valueOf( post.getComment_count()));
         final String finalName = name;
         listPostViewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (FriendWallActivity.instance!= null){
-                    FriendWallActivity.instance.moveToDetailPost(post.getId(), finalName,post.getCreate_time(),post.getContent(),post.getLike(),post.getComment());
+                    FriendWallActivity.instance.moveToDetailPost(post.getId(), finalName,post.getCreate_time(),post.getContent(),post.getLike_count(),post.getComment_count());
                 }else{
-                    Home.instance.moveToDetailPost(post.getId(), finalName,post.getCreate_time(),post.getContent(),post.getLike(),post.getComment());
+                    Home.instance.moveToDetailPost(post.getId(), finalName,post.getCreate_time(),post.getContent(),post.getLike_count(),post.getComment_count());
                 }
             }
         });
