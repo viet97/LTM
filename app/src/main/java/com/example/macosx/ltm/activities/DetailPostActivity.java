@@ -40,6 +40,7 @@ public class DetailPostActivity extends Activity {
     private Button send;
     private int likeCount = 0;
     private int commentCount =0;
+    public static DetailPostActivity instance = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +124,19 @@ public class DetailPostActivity extends Activity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        instance = this;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        instance = null;
+    }
+
     private void getListComments(final Context context) {
             CommentService commentService = NetworkManager.getInstance().create(CommentService.class);
             String url = "show_comments?id=" + getIntent().getExtras().get("id").toString();

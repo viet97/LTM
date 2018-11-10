@@ -1,6 +1,9 @@
 package com.example.macosx.ltm.adapters;
 
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,16 +15,27 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.activities.DetailPostActivity;
+import com.example.macosx.ltm.activities.FriendWallActivity;
+import com.example.macosx.ltm.activities.Home;
 import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.database.models.Comment;
 import com.example.macosx.ltm.database.models.Notification;
 import com.example.macosx.ltm.database.models.User;
 import com.example.macosx.ltm.fragments.tab.FriendTab;
+import com.example.macosx.ltm.fragments.tab.HomeTab;
+import com.example.macosx.ltm.network.NetworkManager;
+import com.example.macosx.ltm.network.api.PostService;
+import com.example.macosx.ltm.network.response.VoidResponse;
 import com.example.macosx.ltm.ultils.Ultils;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ListCommentAdapter extends RecyclerView.Adapter<ListCommentAdapter.ListCommentViewHolder> {
     public class ListCommentViewHolder extends RecyclerView.ViewHolder{
@@ -48,12 +62,55 @@ public class ListCommentAdapter extends RecyclerView.Adapter<ListCommentAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListCommentViewHolder listFriendViewHolder, int i) {
+    public void onBindViewHolder(@NonNull ListCommentViewHolder listCommentViewHolder, int i) {
         Comment comment = DbContext.getInstance().getListComments().get(i);
-        listFriendViewHolder.content.setText(comment.getContent());
-        listFriendViewHolder.time.setText(comment.getCreate_time());
-        listFriendViewHolder.name.setText(Ultils.instance.getNameOfPost(comment.getUser_comment_id()));
+        listCommentViewHolder.content.setText(comment.getContent());
+        listCommentViewHolder.time.setText(comment.getCreate_time());
+        listCommentViewHolder.name.setText(Ultils.instance.getNameOfPost(comment.getUser_comment_id()));
+        Boolean canDelete = false;
+        if (comment.getUser_comment_id() == DbContext.getInstance().getCurrentUser().getId()){
+            canDelete = true;
+        }
+        if (canDelete) {
+            listCommentViewHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final Context context = DetailPostActivity.instance;
 
+                    new AlertDialog.Builder(context)
+                            .setTitle("Xóa")
+                            .setMessage("Bạn muốn xóa bình luận này?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    PostService postService = NetworkManager.getInstance().create(PostService.class);
+                                    postService.delete("delete_post?id=" + DetailPostActivity.instance.getIntent().getExtras().get("id").toString()).enqueue(new Callback<VoidResponse>() {
+                                        @Override
+                                        public void onResponse(Call<VoidResponse> call, Response<VoidResponse> response) {
+                                            VoidResponse voidResponse = response.body();
+                                            if (voidResponse.getErrorCode().equals("0")) {
+                                                if (FriendWallActivity.instance != null) {
+                                                    FriendWallActivity.instance.getAllPost();
+                                                } else {
+                                                    HomeTab.instance.getAllPost(context, DbContext.getInstance().getCurrentUser().getId());
+                                                }
+                                            } else {
+                                                com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(context, context.getString(R.string.error), voidResponse.getMsg());
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<VoidResponse> call, Throwable t) {
+                                            com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(context, context.getString(R.string.error), context.getString(R.string.failur_message));
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null).show();
+                    return false;
+                }
+            });
+        }
 
     }
 

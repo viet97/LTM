@@ -29,7 +29,7 @@ import retrofit2.Response;
 public class FriendWallActivity extends Activity {
         public int id = -1;
         private static final String TAG = "HomeTab";
-        private RecyclerView listPost;
+        public RecyclerView listPost;
         private ArrayList<Post> listPostData;
         EditText statusPost;
         TextView pickImage;

@@ -72,13 +72,16 @@ public class HomeTab extends Fragment {
                 view.getContext().startActivity(new Intent(view.getContext(),PostStatus.class));
             }
         });
-        getFriends(view.getContext());
-        getAllPost(view.getContext(),id);
+        if (DbContext.getInstance().getListFriends().size() == 0) {
+            getFriends(view.getContext());
+        }else {
+            getAllPost(view.getContext(), id);
+        }
 
 
     }
     private void getFriends(final Context context) {
-        if (DbContext.getInstance().getListFriends().size() == 0) {
+
             FriendService friendService = NetworkManager.getInstance().create(FriendService.class);
             String url = "friends?id=" + DbContext.getInstance().getCurrentUser().getId();
             friendService.getAllFriends(url).enqueue(new Callback<FriendResponse>() {
@@ -87,7 +90,7 @@ public class HomeTab extends Fragment {
                     FriendResponse friendResponse = response.body();
                     if (friendResponse.getErrorCode().equals("0")) {
                         DbContext.getInstance().setListFriends(friendResponse.getListFriends());
-
+                        getAllPost(context, id);
                     } else {
                         Dialog.instance.showMessageDialog(context, context.getString(R.string.error), friendResponse.getMsg());
                     }
@@ -99,7 +102,7 @@ public class HomeTab extends Fragment {
 
                 }
             });
-        }
+
     }
     @Override
     public void onResume() {

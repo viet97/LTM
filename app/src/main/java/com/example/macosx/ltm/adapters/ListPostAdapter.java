@@ -1,5 +1,9 @@
 package com.example.macosx.ltm.adapters;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.Network;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,11 +17,21 @@ import android.widget.TextView;
 import com.example.macosx.ltm.R;
 import com.example.macosx.ltm.activities.FriendWallActivity;
 import com.example.macosx.ltm.activities.Home;
+import com.example.macosx.ltm.activities.Login;
 import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.database.models.Post;
+import com.example.macosx.ltm.fragments.tab.HomeTab;
+import com.example.macosx.ltm.network.NetworkManager;
+import com.example.macosx.ltm.network.api.PostService;
+import com.example.macosx.ltm.network.response.VoidResponse;
+import com.example.macosx.ltm.ultils.Dialog;
 import com.example.macosx.ltm.ultils.Ultils;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPostViewHolder> {
     public class ListPostViewHolder extends RecyclerView.ViewHolder{
@@ -82,6 +96,54 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
                 }
             }
         });
+    Boolean canDelete = false;
+    if (post.getUser_id_receive() == DbContext.getInstance().getCurrentUser().getId() || post.getUser_id_send() == DbContext.getInstance().getCurrentUser().getId()){
+        canDelete = true;
+    }
+    if (canDelete) {
+        listPostViewHolder.container.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                final Context context;
+                if (FriendWallActivity.instance != null) {
+                    context = FriendWallActivity.instance;
+                } else {
+                    context = Home.instance;
+                }
+                new AlertDialog.Builder(context)
+                        .setTitle("Xóa")
+                        .setMessage("Bạn muốn xóa bài đăng này?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                PostService postService = NetworkManager.getInstance().create(PostService.class);
+                                postService.delete("delete_post?id=" + post.getId()).enqueue(new Callback<VoidResponse>() {
+                                    @Override
+                                    public void onResponse(Call<VoidResponse> call, Response<VoidResponse> response) {
+                                        VoidResponse voidResponse = response.body();
+                                        if (voidResponse.getErrorCode().equals("0")) {
+                                            if (FriendWallActivity.instance != null) {
+                                                FriendWallActivity.instance.getAllPost();
+                                            } else {
+                                                HomeTab.instance.getAllPost(context, DbContext.getInstance().getCurrentUser().getId());
+                                            }
+                                        } else {
+                                            com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(context, context.getString(R.string.error), voidResponse.getMsg());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<VoidResponse> call, Throwable t) {
+                                        com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(context, context.getString(R.string.error), context.getString(R.string.failur_message));
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+                return false;
+            }
+        });
+    }
     }
 
     @Override

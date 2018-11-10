@@ -57,7 +57,7 @@ public class Login extends Activity implements View.OnClickListener {
                     final Handler handle1 = new Handler();
 
                     LoginService loginService = NetworkManager.getInstance().create(LoginService.class);
-                    loginService.login("luan","123456").enqueue(new Callback<LoginResponse>() {
+                    loginService.login("cuong","123456").enqueue(new Callback<LoginResponse>() {
                         @Override
                         public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                             LoginResponse loginResponse = response.body();
