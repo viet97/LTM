@@ -108,6 +108,7 @@ public class HomeTab extends Fragment {
     public void onResume() {
         super.onResume();
         instance = this;
+        getAllPost(getActivity(),id);
     }
 
     public void getAllPost(final Context context, int id ) {

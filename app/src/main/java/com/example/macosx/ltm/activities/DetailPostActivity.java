@@ -15,12 +15,16 @@ import android.widget.TextView;
 import com.example.macosx.ltm.R;
 import com.example.macosx.ltm.adapters.ListCommentAdapter;
 import com.example.macosx.ltm.database.DbContext;
+import com.example.macosx.ltm.database.models.Comment;
+import com.example.macosx.ltm.database.models.User;
 import com.example.macosx.ltm.network.NetworkManager;
 import com.example.macosx.ltm.network.api.CommentService;
 import com.example.macosx.ltm.network.api.FriendService;
 import com.example.macosx.ltm.network.api.LikeService;
+import com.example.macosx.ltm.network.response.CommentCountResponse;
 import com.example.macosx.ltm.network.response.CommentResponse;
 import com.example.macosx.ltm.network.response.FriendResponse;
+import com.example.macosx.ltm.network.response.LikeCountResponse;
 import com.example.macosx.ltm.network.response.VoidResponse;
 import com.example.macosx.ltm.ultils.Dialog;
 
@@ -35,7 +39,7 @@ public class DetailPostActivity extends Activity {
     private TextView time;
     private TextView like;
     private TextView comment;
-    private RecyclerView rv_list_comments;
+    public RecyclerView rv_list_comments;
     private EditText input_content;
     private Button send;
     private int likeCount = 0;
@@ -87,8 +91,7 @@ public class DetailPostActivity extends Activity {
                     public void onResponse(Call<VoidResponse> call, Response<VoidResponse> response) {
                         VoidResponse voidResponse = response.body();
                         if (voidResponse.getErrorCode().equals("0")) {
-                            likeCount++;
-                            like.setText(likeCount+ " likes");
+                            DetailPostActivity.instance.updateLike();
                         } else {
                             Dialog.instance.showMessageDialog(DetailPostActivity.this, getString(R.string.error), voidResponse.getMsg());
                         }
@@ -101,17 +104,19 @@ public class DetailPostActivity extends Activity {
                 });
             }
         });
+
+
     }
     private void postComment(){
         CommentService commentService = NetworkManager.getInstance().create(CommentService.class);
-        commentService.comment(DbContext.getInstance().getCurrentUser().getId(),Integer.parseInt( getIntent().getExtras().get("id").toString()),input_content.getText().toString()).enqueue(new Callback<VoidResponse>() {
+        commentService.comment(DbContext.getInstance().getCurrentUser().getId(),Integer.parseInt(getIntent().getExtras().get("id").toString()),input_content.getText().toString()).enqueue(new Callback<VoidResponse>() {
             @Override
             public void onResponse(Call<VoidResponse> call, Response<VoidResponse> response) {
                 VoidResponse voidResponse = response.body();
                 if (voidResponse.getErrorCode().equals("0")) {
                     getListComments(DetailPostActivity.this);
                     input_content.setText("");
-
+                    updateComment();
                 } else {
                     Dialog.instance.showMessageDialog(DetailPostActivity.this, getString(R.string.error), voidResponse.getMsg());
                 }
@@ -160,4 +165,45 @@ public class DetailPostActivity extends Activity {
             });
     }
 
+    public void updateLike(){
+        LikeService likeService = NetworkManager.getInstance().create(LikeService.class);
+        String url = "count_like?id="+getIntent().getExtras().get("id");
+        likeService.countLike(url).enqueue(new Callback<LikeCountResponse>() {
+            @Override
+            public void onResponse(Call<LikeCountResponse> call, Response<LikeCountResponse> response) {
+                LikeCountResponse likeCountResponse = response.body();
+                if (likeCountResponse.getErrorCode().equals("0")){
+                    like.setText(likeCountResponse.getLike_count()+" thích");
+                }else{
+                    Dialog.instance.showMessageDialog(DetailPostActivity.this, getString(R.string.error), likeCountResponse.getMsg());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LikeCountResponse> call, Throwable t) {
+                Dialog.instance.showMessageDialog(DetailPostActivity.this, getString(R.string.error), getString(R.string.failur_message));
+            }
+        });
+    }
+
+    public void  updateComment(){
+        CommentService commentService = NetworkManager.getInstance().create(CommentService.class);
+        String url = "count_comment?id="+getIntent().getExtras().get("id");
+        commentService.countComment(url).enqueue(new Callback<CommentCountResponse>() {
+            @Override
+            public void onResponse(Call<CommentCountResponse> call, Response<CommentCountResponse> response) {
+                CommentCountResponse commentCountResponse = response.body();
+                if (commentCountResponse.getErrorCode().equals("0")){
+                    comment.setText(commentCountResponse.getComment_count()+" comment");
+                }else{
+                    Dialog.instance.showMessageDialog(DetailPostActivity.this, getString(R.string.error), commentCountResponse.getMsg());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommentCountResponse> call, Throwable t) {
+                Dialog.instance.showMessageDialog(DetailPostActivity.this, getString(R.string.error), getString(R.string.failur_message));
+            }
+        });
+    }
 }

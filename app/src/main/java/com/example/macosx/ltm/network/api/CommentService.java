@@ -1,10 +1,13 @@
 package com.example.macosx.ltm.network.api;
 
+import com.example.macosx.ltm.network.response.CommentCountResponse;
 import com.example.macosx.ltm.network.response.CommentResponse;
 import com.example.macosx.ltm.network.response.FriendResponse;
+import com.example.macosx.ltm.network.response.LikeCountResponse;
 import com.example.macosx.ltm.network.response.VoidResponse;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -17,4 +20,8 @@ public interface CommentService {
     @FormUrlEncoded
     @POST("comment")
     Call<VoidResponse> comment(@Field("user_comment_id") int user_comment_id, @Field("post_id") int post_id,@Field("content") String content);
+    @DELETE
+    Call<VoidResponse> delete(@Url String url);
+    @GET
+    Call<CommentCountResponse> countComment(@Url String url);
 }

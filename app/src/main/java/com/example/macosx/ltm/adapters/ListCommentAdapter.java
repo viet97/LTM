@@ -25,8 +25,10 @@ import com.example.macosx.ltm.database.models.User;
 import com.example.macosx.ltm.fragments.tab.FriendTab;
 import com.example.macosx.ltm.fragments.tab.HomeTab;
 import com.example.macosx.ltm.network.NetworkManager;
+import com.example.macosx.ltm.network.api.CommentService;
 import com.example.macosx.ltm.network.api.PostService;
 import com.example.macosx.ltm.network.response.VoidResponse;
+import com.example.macosx.ltm.ultils.Dialog;
 import com.example.macosx.ltm.ultils.Ultils;
 
 import org.w3c.dom.Text;
@@ -51,6 +53,7 @@ public class ListCommentAdapter extends RecyclerView.Adapter<ListCommentAdapter.
             name = itemView.findViewById(R.id.name);
             time = itemView.findViewById(R.id.time);
             content = itemView.findViewById(R.id.content);
+            container = itemView.findViewById(R.id.container);
         }
     }
 
@@ -62,8 +65,8 @@ public class ListCommentAdapter extends RecyclerView.Adapter<ListCommentAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListCommentViewHolder listCommentViewHolder, int i) {
-        Comment comment = DbContext.getInstance().getListComments().get(i);
+    public void onBindViewHolder(@NonNull ListCommentViewHolder listCommentViewHolder, final int i) {
+        final Comment comment = DbContext.getInstance().getListComments().get(i);
         listCommentViewHolder.content.setText(comment.getContent());
         listCommentViewHolder.time.setText(comment.getCreate_time());
         listCommentViewHolder.name.setText(Ultils.instance.getNameOfPost(comment.getUser_comment_id()));
@@ -83,25 +86,23 @@ public class ListCommentAdapter extends RecyclerView.Adapter<ListCommentAdapter.
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    PostService postService = NetworkManager.getInstance().create(PostService.class);
-                                    postService.delete("delete_post?id=" + DetailPostActivity.instance.getIntent().getExtras().get("id").toString()).enqueue(new Callback<VoidResponse>() {
+                                    CommentService commentService = NetworkManager.getInstance().create(CommentService.class);
+                                    commentService.delete("delete_comment?id=" + comment.getId()+"&post_id=" + DetailPostActivity.instance.getIntent().getExtras().get("id").toString()).enqueue(new Callback<VoidResponse>() {
                                         @Override
                                         public void onResponse(Call<VoidResponse> call, Response<VoidResponse> response) {
                                             VoidResponse voidResponse = response.body();
                                             if (voidResponse.getErrorCode().equals("0")) {
-                                                if (FriendWallActivity.instance != null) {
-                                                    FriendWallActivity.instance.getAllPost();
-                                                } else {
-                                                    HomeTab.instance.getAllPost(context, DbContext.getInstance().getCurrentUser().getId());
-                                                }
+                                                DbContext.getInstance().getListComments().remove(i);
+                                                DetailPostActivity.instance.rv_list_comments.getAdapter().notifyDataSetChanged();
+                                                DetailPostActivity.instance.updateComment();
                                             } else {
-                                                com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(context, context.getString(R.string.error), voidResponse.getMsg());
+                                                Dialog.instance.showMessageDialog(context, context.getString(R.string.error), voidResponse.getMsg());
                                             }
                                         }
 
                                         @Override
                                         public void onFailure(Call<VoidResponse> call, Throwable t) {
-                                            com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(context, context.getString(R.string.error), context.getString(R.string.failur_message));
+                                            Dialog.instance.showMessageDialog(context, context.getString(R.string.error), context.getString(R.string.failur_message));
                                         }
                                     });
                                 }
