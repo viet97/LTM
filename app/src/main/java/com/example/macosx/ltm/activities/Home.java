@@ -8,9 +8,11 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -20,10 +22,20 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.fragments.tab.BottomNavigationTabType;
 import com.example.macosx.ltm.fragments.tab.FriendTab;
 import com.example.macosx.ltm.fragments.tab.HomeTab;
 import com.example.macosx.ltm.fragments.tab.NotificationTab;
+import com.example.macosx.ltm.network.NetworkManager;
+import com.example.macosx.ltm.network.api.LoginService;
+import com.example.macosx.ltm.network.api.LogoutService;
+import com.example.macosx.ltm.network.response.LoginResponse;
+import com.example.macosx.ltm.network.response.VoidResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -123,10 +135,32 @@ public class Home extends Activity {
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            Home.super.onBackPressed();
+                            logoutAct();
                         }})
                     .setNegativeButton(android.R.string.no, null).show();
         }
+    }
+
+    private void logoutAct() {
+        LogoutService logoutService = NetworkManager.getInstance().create(LogoutService.class);
+        logoutService.login("cuong","123456").enqueue(new Callback<VoidResponse>() {
+            @Override
+            public void onResponse(Call<VoidResponse> call, Response<VoidResponse> response) {
+                VoidResponse logoutResponse = response.body();
+                if (logoutResponse.getErrorCode().equals("0")){
+                   finish();
+                }else{
+                    com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(Home.this,getString(R.string.error),logoutResponse.getMsg());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VoidResponse> call, Throwable throwable) {
+                com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(Home.this,getString(R.string.error),getString(R.string.failur_message));
+
+                Log.d("Login", "onFailure: "+throwable.toString());
+            }
+        });
     }
 
     public void moveToDetailPost(int id,String name,String time,String content,int like,int comment){

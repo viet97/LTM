@@ -116,7 +116,7 @@ public class HomeTab extends Fragment {
             id = DbContext.getInstance().getCurrentUser().getId();
         }
         PostService postService = NetworkManager.getInstance().create(PostService.class);
-        String url = "receive_posts?id="+id;
+        String url = "posts_of_user?id="+id;
         postService.getAllPosts(url).enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {

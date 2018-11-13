@@ -140,7 +140,7 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
                             }
                         })
                         .setNegativeButton(android.R.string.no, null).show();
-                return false;
+                return true;
             }
         });
     }
