@@ -39,7 +39,7 @@ public class NetworkManager {
     private Retrofit retrofit;
     private long CONNECT_TIMEOUT = 8;
     private long READ_TIMEOUT = 8;
-    private String BASE_URL = "http://192.168.101.116:8080/api/";
+    private String BASE_URL = "http://172.20.10.13:8080/api/";
 
     private NetworkManager() {
         try {

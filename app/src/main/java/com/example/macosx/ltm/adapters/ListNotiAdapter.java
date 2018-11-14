@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.database.models.Notification;
 
 import org.w3c.dom.Text;
@@ -17,7 +18,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 public class ListNotiAdapter extends RecyclerView.Adapter<ListNotiAdapter.ListNotiViewHolder> {
-    private ArrayList<Notification> listNoti;
+
     public class ListNotiViewHolder extends RecyclerView.ViewHolder{
         private ImageView avatar;
         private TextView content;
@@ -29,9 +30,6 @@ public class ListNotiAdapter extends RecyclerView.Adapter<ListNotiAdapter.ListNo
             time = itemView.findViewById(R.id.time);
         }
     }
-    public ListNotiAdapter(ArrayList<Notification> listNoti){
-        this.listNoti = listNoti;
-    }
     @NonNull
     @Override
     public ListNotiViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -41,13 +39,13 @@ public class ListNotiAdapter extends RecyclerView.Adapter<ListNotiAdapter.ListNo
 
     @Override
     public void onBindViewHolder(@NonNull ListNotiViewHolder listNotiViewHolder, int i) {
-        listNotiViewHolder.content.setText(listNoti.get(i).getContent());
-        listNotiViewHolder.time.setText(listNoti.get(i).getTime());
+        listNotiViewHolder.content.setText(DbContext.getInstance().getListNotifications().get(i).getContent());
+        listNotiViewHolder.time.setText(DbContext.getInstance().getListNotifications().get(i).getCreate_time());
     }
 
     @Override
     public int getItemCount() {
-        return listNoti.size();
+        return DbContext.getInstance().getListNotifications().size();
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.macosx.ltm.database;
 
 import com.example.macosx.ltm.database.models.Comment;
+import com.example.macosx.ltm.database.models.Notification;
 import com.example.macosx.ltm.database.models.Post;
 import com.example.macosx.ltm.database.models.User;
 
@@ -12,12 +13,14 @@ public class DbContext {
     private ArrayList<User> listFriends;
     private ArrayList<Post> listPosts;
     private ArrayList<Comment> listComments;
+    private ArrayList<Notification> listNotifications;
     private User currentUser;
     DbContext(){
             listFriends = new ArrayList<>();
             currentUser = new User();
             listPosts = new ArrayList<>();
             listComments = new ArrayList<>();
+            listNotifications     = new ArrayList<>();
     }
 
     public static DbContext getInstance() {
@@ -46,6 +49,14 @@ public class DbContext {
 
     public void setListPosts(ArrayList<Post> listPosts) {
         this.listPosts = listPosts;
+    }
+
+    public ArrayList<Notification> getListNotifications() {
+        return listNotifications;
+    }
+
+    public void setListNotifications(ArrayList<Notification> listNotifications) {
+        this.listNotifications = listNotifications;
     }
 
     public ArrayList<Comment> getListComments() {

@@ -1,22 +1,40 @@
 package com.example.macosx.ltm.database.models;
 
 public class Notification {
-    private String imageUrl;
+    private int id;
+    private int user_id;
+    private String create_time;
     private String content;
-    private String time;
 
-    public Notification(String imageUrl, String content, String time) {
-        this.imageUrl = imageUrl;
+    public Notification(int id, int user_id, String create_time, String content) {
+        this.id = id;
+        this.user_id = user_id;
+        this.create_time = create_time;
         this.content = content;
-        this.time = time;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public int getId() {
+        return id;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
     }
 
     public String getContent() {
@@ -25,13 +43,5 @@ public class Notification {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 }

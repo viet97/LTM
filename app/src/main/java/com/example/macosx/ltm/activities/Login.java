@@ -17,6 +17,17 @@ import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.network.NetworkManager;
 import com.example.macosx.ltm.network.api.LoginService;
 import com.example.macosx.ltm.network.response.LoginResponse;
+import com.koushikdutta.async.http.AsyncHttpClient;
+import com.koushikdutta.async.http.WebSocket;
+import com.koushikdutta.async.http.socketio.Acknowledge;
+import com.koushikdutta.async.http.socketio.ConnectCallback;
+import com.koushikdutta.async.http.socketio.EventCallback;
+import com.koushikdutta.async.http.socketio.JSONCallback;
+import com.koushikdutta.async.http.socketio.SocketIOClient;
+import com.koushikdutta.async.http.socketio.StringCallback;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import retrofit2.Call;
@@ -42,6 +53,7 @@ public class Login extends Activity implements View.OnClickListener {
         loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(this);
         loginButton.callOnClick();
+
 
     }
 

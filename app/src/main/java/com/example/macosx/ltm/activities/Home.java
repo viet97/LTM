@@ -32,6 +32,8 @@ import com.example.macosx.ltm.network.api.LoginService;
 import com.example.macosx.ltm.network.api.LogoutService;
 import com.example.macosx.ltm.network.response.LoginResponse;
 import com.example.macosx.ltm.network.response.VoidResponse;
+import com.koushikdutta.async.http.AsyncHttpClient;
+import com.koushikdutta.async.http.WebSocket;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -121,6 +123,33 @@ public class Home extends Activity {
     protected void onResume() {
         super.onResume();
         instance = this;
+        AsyncHttpClient.getDefaultInstance().websocket("ws://172.20.10.13:8080/social_network", null, new AsyncHttpClient.WebSocketConnectCallback() {
+            @Override
+            public void onCompleted(Exception ex, WebSocket webSocket) {
+                if (ex != null) {
+                    ex.printStackTrace();
+                    return;
+                }
+
+
+
+                webSocket.setStringCallback(new WebSocket.StringCallback() {
+                    public void onStringAvailable(String s) {
+                        if (DetailPostActivity.instance!=null){
+                            DetailPostActivity.instance.getListComments();
+                            DetailPostActivity.instance.updateComment();
+                            DetailPostActivity.instance.updateLike();
+                            HomeTab.instance.getAllPost(Home.this,HomeTab.instance.id);
+                            NotificationTab.instance.getAllNoti();
+                        }
+                    }
+                });
+
+                webSocket.send(""+DbContext.getInstance().getCurrentUser().getId());
+            }
+        });
+
+
     }
 
     @Override

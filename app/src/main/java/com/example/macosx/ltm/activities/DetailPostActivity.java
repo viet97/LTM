@@ -73,7 +73,7 @@ public class DetailPostActivity extends Activity {
         rv_list_comments.setAdapter(new ListCommentAdapter());
         rv_list_comments.setHasFixedSize(true);
         rv_list_comments.setLayoutManager(new LinearLayoutManager(this));
-        getListComments(this);
+        getListComments();
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,7 +114,7 @@ public class DetailPostActivity extends Activity {
             public void onResponse(Call<VoidResponse> call, Response<VoidResponse> response) {
                 VoidResponse voidResponse = response.body();
                 if (voidResponse.getErrorCode().equals("0")) {
-                    getListComments(DetailPostActivity.this);
+                    getListComments();
                     input_content.setText("");
                     updateComment();
                 } else {
@@ -142,7 +142,7 @@ public class DetailPostActivity extends Activity {
         instance = null;
     }
 
-    private void getListComments(final Context context) {
+    public void getListComments() {
             CommentService commentService = NetworkManager.getInstance().create(CommentService.class);
             String url = "show_comments?id=" + getIntent().getExtras().get("id").toString();
         commentService.getAllComment(url).enqueue(new Callback<CommentResponse>() {
@@ -153,13 +153,13 @@ public class DetailPostActivity extends Activity {
                         DbContext.getInstance().setListComments(commentResponse.getComments());
                         rv_list_comments.getAdapter().notifyDataSetChanged();
                     } else {
-                        Dialog.instance.showMessageDialog(context, context.getString(R.string.error), commentResponse.getMsg());
+                        Dialog.instance.showMessageDialog(DetailPostActivity.this, getString(R.string.error), commentResponse.getMsg());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<CommentResponse> call, Throwable throwable) {
-                    Dialog.instance.showMessageDialog(context, context.getString(R.string.error), context.getString(R.string.failur_message));
+                    Dialog.instance.showMessageDialog(DetailPostActivity.this, getString(R.string.error), getString(R.string.failur_message));
 
                 }
             });
