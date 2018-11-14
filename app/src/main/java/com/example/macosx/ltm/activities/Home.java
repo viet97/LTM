@@ -32,6 +32,7 @@ import com.example.macosx.ltm.network.api.LoginService;
 import com.example.macosx.ltm.network.api.LogoutService;
 import com.example.macosx.ltm.network.response.LoginResponse;
 import com.example.macosx.ltm.network.response.VoidResponse;
+import com.example.macosx.ltm.ultils.Constant;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 
@@ -123,7 +124,7 @@ public class Home extends Activity {
     protected void onResume() {
         super.onResume();
         instance = this;
-        AsyncHttpClient.getDefaultInstance().websocket("ws://172.20.10.13:8080/social_network", null, new AsyncHttpClient.WebSocketConnectCallback() {
+        AsyncHttpClient.getDefaultInstance().websocket(String.format("%s%s%s","ws://",Constant.BASE_URL,"social_network"), null, new AsyncHttpClient.WebSocketConnectCallback() {
             @Override
             public void onCompleted(Exception ex, WebSocket webSocket) {
                 if (ex != null) {

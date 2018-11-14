@@ -10,8 +10,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,6 +22,7 @@ import com.example.macosx.ltm.R;
 import com.example.macosx.ltm.activities.Home;
 import com.example.macosx.ltm.activities.PostStatus;
 import com.example.macosx.ltm.adapters.ListPostAdapter;
+import com.example.macosx.ltm.customviews.LockableScrollView;
 import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.database.models.Post;
 import com.example.macosx.ltm.network.NetworkManager;
@@ -27,6 +31,8 @@ import com.example.macosx.ltm.network.api.PostService;
 import com.example.macosx.ltm.network.response.FriendResponse;
 import com.example.macosx.ltm.network.response.PostResponse;
 import com.example.macosx.ltm.ultils.Dialog;
+import com.weiwangcn.betterspinner.library.BetterSpinner;
+
 
 import org.w3c.dom.Text;
 
@@ -47,11 +53,19 @@ import retrofit2.Response;
 public class HomeTab extends Fragment {
     public int id = -1;
     private static final String TAG = "HomeTab";
+    private static final int MY_POST = 0;
+    private static final int MY_FRIEND_POST = 1;
+   private int currentPostType=0;
     public static HomeTab instance = new HomeTab();
     private RecyclerView listPost;
     private ArrayList<Post> listPostData;
     EditText statusPost;
     TextView pickImage;
+    LockableScrollView lockableScrollView;
+    BetterSpinner spinner;
+    private static final String[] TYPEPOST = new String[] {
+            "Bài viết bản thân","Bài viết bạn bè"
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +74,7 @@ public class HomeTab extends Fragment {
 
     private void setupUI(final View view) {
         listPostData = new ArrayList<>();
-
+        lockableScrollView = ((LockableScrollView)view.findViewById(R.id.home_scrollview));
         listPost = view.findViewById(R.id.list_post);
         listPost.setAdapter(new ListPostAdapter());
         listPost.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -78,12 +92,26 @@ public class HomeTab extends Fragment {
             getAllPost(view.getContext(), id);
         }
 
+        spinner = view.findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_dropdown_item_1line, TYPEPOST);
+
+        spinner.setAdapter(adapter);
+        spinner.setSelection(0);
+        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                currentPostType = position;
+                getAllPost(getActivity(),HomeTab.this.id);
+            }
+        });
 
     }
     private void getFriends(final Context context) {
 
             FriendService friendService = NetworkManager.getInstance().create(FriendService.class);
             String url = "friends?id=" + DbContext.getInstance().getCurrentUser().getId();
+
             friendService.getAllFriends(url).enqueue(new Callback<FriendResponse>() {
                 @Override
                 public void onResponse(Call<FriendResponse> call, Response<FriendResponse> response) {
@@ -115,8 +143,14 @@ public class HomeTab extends Fragment {
         if (id == -1){
             id = DbContext.getInstance().getCurrentUser().getId();
         }
+
         PostService postService = NetworkManager.getInstance().create(PostService.class);
-        String url = "send_posts?id="+id;
+        String url ;
+        if (currentPostType == MY_POST){
+            url = "posts_of_user?id="+id;
+        }else{
+            url = "posts_of_friend?id="+id;
+        }
         postService.getAllPosts(url).enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {

@@ -1,1 +1,1 @@
-include ':app', ':sample', ':bottom-navigation-bar'
+include ':app', ':sample', ':bottom-navigation-bar', ':library', ':demo'

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.example.macosx.ltm.ultils.Constant;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class NetworkManager {
     private Retrofit retrofit;
     private long CONNECT_TIMEOUT = 8;
     private long READ_TIMEOUT = 8;
-    private String BASE_URL = "http://172.20.10.13:8080/api/";
+    private String BASE_URL = String.format("%s%s",Constant.BASE_URL,"api/");
 
     private NetworkManager() {
         try {
