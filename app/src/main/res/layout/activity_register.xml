@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.Register">
+    <ImageView
+        android:scaleType="fitXY"
+        android:src="@drawable/background_login_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <ImageView
+        android:layout_marginBottom="10dp"
+        android:layout_alignBottom="@id/username"
+        android:layout_alignLeft="@id/under_username_line"
+        android:src="@drawable/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:layout_alignRight="@id/under_username_line"
+        android:id="@+id/username"
+        android:layout_marginLeft="48dp"
+        android:background="@drawable/round_corners"
+        android:layout_above="@id/password"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:hint="@string/username_login_placeholder"
+        android:textColorHint="@color/white"
+        />
+    <View
+        android:id="@+id/under_username_line"
+        android:layout_marginHorizontal="16dp"
+        android:background="@color/white"
+        android:layout_below="@id/username"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <ImageView
+        android:layout_marginBottom="10dp"
+        android:layout_alignBottom="@id/password"
+        android:layout_alignLeft="@id/under_password_line"
+        android:src="@drawable/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:inputType="textPassword"
+        android:layout_marginTop="8dp"
+        android:id="@+id/password"
+        android:layout_marginLeft="48dp"
+        android:layout_alignRight="@id/under_username_line"
+        android:background="@drawable/round_corners"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:hint="@string/password_login_placeholder"
+        android:textColorHint="@color/white"
+        />
+    <ImageView
+        android:layout_marginBottom="10dp"
+        android:layout_alignBottom="@id/name"
+        android:layout_alignLeft="@id/under_name_line"
+        android:src="@drawable/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:id="@+id/under_password_line"
+        android:layout_marginHorizontal="16dp"
+        android:background="@color/white"
+        android:layout_below="@id/password"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <EditText
+        android:layout_below="@id/password"
+        android:layout_marginTop="8dp"
+        android:id="@+id/name"
+        android:layout_marginLeft="48dp"
+        android:layout_alignRight="@id/under_name_line"
+        android:background="@drawable/round_corners"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:hint="Họ và tên"
+        android:textColorHint="@color/white"
+        />
+
+    <View
+        android:id="@+id/under_name_line"
+        android:layout_marginHorizontal="16dp"
+        android:background="@color/white"
+        android:layout_below="@id/name"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+        android:background="@drawable/background_login_button"
+        android:layout_marginTop="28dp"
+        android:layout_marginHorizontal="16dp"
+        android:id="@+id/regis_button"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_below="@id/name"
+        android:layout_centerHorizontal="true"
+        android:text="Đăng ký"
+        app:spinning_bar_width="4dp"
+        app:spinning_bar_color="@color/white"
+        app:spinning_bar_padding="6dp"
+        app:initialCornerAngle="5dp"
+        android:textColor="@color/white"
+        />
+
+</RelativeLayout>

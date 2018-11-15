@@ -14,6 +14,9 @@ public class DbContext {
     private ArrayList<Post> listPosts;
     private ArrayList<Comment> listComments;
     private ArrayList<Notification> listNotifications;
+    private ArrayList<Integer> listIsLikes;
+    private ArrayList<Post> listNotiPosts;
+    private ArrayList<Integer> listNotiIsLike;
     private User currentUser;
     DbContext(){
             listFriends = new ArrayList<>();
@@ -21,6 +24,17 @@ public class DbContext {
             listPosts = new ArrayList<>();
             listComments = new ArrayList<>();
             listNotifications     = new ArrayList<>();
+         listIsLikes     = new ArrayList<>();
+         listNotiPosts     = new ArrayList<>();
+        listNotiIsLike     = new ArrayList<>();
+    }
+
+    public ArrayList<Integer> getListNotiIsLike() {
+        return listNotiIsLike;
+    }
+
+    public void setListNotiIsLike(ArrayList<Integer> listNotiIsLike) {
+        this.listNotiIsLike = listNotiIsLike;
     }
 
     public static DbContext getInstance() {
@@ -57,6 +71,22 @@ public class DbContext {
 
     public void setListNotifications(ArrayList<Notification> listNotifications) {
         this.listNotifications = listNotifications;
+    }
+
+    public ArrayList<Integer> getListIsLikes() {
+        return listIsLikes;
+    }
+
+    public void setListIsLikes(ArrayList<Integer> listIsLikes) {
+        this.listIsLikes = listIsLikes;
+    }
+
+    public ArrayList<Post> getListNotiPosts() {
+        return listNotiPosts;
+    }
+
+    public void setListNotiPosts(ArrayList<Post> listNotiPosts) {
+        this.listNotiPosts = listNotiPosts;
     }
 
     public ArrayList<Comment> getListComments() {

@@ -61,6 +61,7 @@ public class HomeTab extends Fragment {
     private ArrayList<Post> listPostData;
     EditText statusPost;
     TextView pickImage;
+    TextView name;
     LockableScrollView lockableScrollView;
     BetterSpinner spinner;
     private static final String[] TYPEPOST = new String[] {
@@ -73,6 +74,9 @@ public class HomeTab extends Fragment {
     }
 
     private void setupUI(final View view) {
+        name = view.findViewById(R.id.name);
+        name.setText(DbContext.getInstance().getCurrentUser().getName());
+
         listPostData = new ArrayList<>();
         lockableScrollView = ((LockableScrollView)view.findViewById(R.id.home_scrollview));
         listPost = view.findViewById(R.id.list_post);
@@ -157,6 +161,7 @@ public class HomeTab extends Fragment {
                 PostResponse postResponse = response.body();
                 if (postResponse.getErrorCode().equals("0")) {
                     DbContext.getInstance().setListPosts(postResponse.getPosts());
+                    DbContext.getInstance().setListIsLikes(postResponse.getIsLike());
                     listPost.getAdapter().notifyDataSetChanged();
 
                 }else{

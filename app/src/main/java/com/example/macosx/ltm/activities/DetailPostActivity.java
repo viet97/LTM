@@ -3,9 +3,11 @@ package com.example.macosx.ltm.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +46,7 @@ public class DetailPostActivity extends Activity {
     private Button send;
     private int likeCount = 0;
     private int commentCount =0;
+    private int isLike ;
     public static DetailPostActivity instance = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +67,23 @@ public class DetailPostActivity extends Activity {
         if (getIntent().getExtras().get("content")!= null) content.setText(getIntent().getExtras().get("content").toString());
         if (getIntent().getExtras().get("like")!= null) {
             likeCount = Integer.parseInt(getIntent().getExtras().get("like").toString());
-            like.setText(getIntent().getExtras().get("like").toString()+ " likes");
+            like.setText(getIntent().getExtras().get("like").toString()+ "  thích");
         }
         if (getIntent().getExtras().get("comment")!= null) {
             commentCount = Integer.parseInt(getIntent().getExtras().get("comment").toString());
-            comment.setText(getIntent().getExtras().get("comment").toString()+ " comments") ;
+            comment.setText(getIntent().getExtras().get("comment").toString()+ " bình luận") ;
         }
+
+        if (getIntent().getExtras().get("islike")!= null) {
+            isLike= Integer.parseInt(getIntent().getExtras().get("islike").toString());
+
+        }
+        if (isLike == 1){
+            like.setTextColor(Color.BLUE);
+        }else{
+            like.setTextColor(Color.parseColor("#808080"));
+        }
+        if (getIntent().getExtras().get("name")!= null)
         rv_list_comments.setAdapter(new ListCommentAdapter());
         rv_list_comments.setHasFixedSize(true);
         rv_list_comments.setLayoutManager(new LinearLayoutManager(this));
@@ -86,12 +100,19 @@ public class DetailPostActivity extends Activity {
             @Override
             public void onClick(View v) {
                 final LikeService likeService = NetworkManager.getInstance().create(LikeService.class);
+                Log.d("LIKEEEEEEEEEEEEEEE", "onClick: "+getIntent().getExtras().get("id").toString());
                 likeService.like(DbContext.getInstance().getCurrentUser().getId(),Integer.parseInt(getIntent().getExtras().get("id").toString())).enqueue(new Callback<VoidResponse>() {
                     @Override
                     public void onResponse(Call<VoidResponse> call, Response<VoidResponse> response) {
                         VoidResponse voidResponse = response.body();
                         if (voidResponse.getErrorCode().equals("0")) {
+                            if (isLike == 1){
+                                isLike =0;
+                            }else {
+                                isLike = 1;
+                            }
                             DetailPostActivity.instance.updateLike();
+
                         } else {
                             Dialog.instance.showMessageDialog(DetailPostActivity.this, getString(R.string.error), voidResponse.getMsg());
                         }
@@ -166,6 +187,7 @@ public class DetailPostActivity extends Activity {
     }
 
     public void updateLike(){
+
         LikeService likeService = NetworkManager.getInstance().create(LikeService.class);
         String url = "count_like?id="+getIntent().getExtras().get("id");
         likeService.countLike(url).enqueue(new Callback<LikeCountResponse>() {
@@ -174,6 +196,11 @@ public class DetailPostActivity extends Activity {
                 LikeCountResponse likeCountResponse = response.body();
                 if (likeCountResponse.getErrorCode().equals("0")){
                     like.setText(likeCountResponse.getLike_count()+" thích");
+                    if (isLike == 1){
+                        like.setTextColor(Color.BLUE);
+                    }else{
+                        like.setTextColor(Color.parseColor("#808080"));
+                    }
                 }else{
                     Dialog.instance.showMessageDialog(DetailPostActivity.this, getString(R.string.error), likeCountResponse.getMsg());
                 }
@@ -194,7 +221,7 @@ public class DetailPostActivity extends Activity {
             public void onResponse(Call<CommentCountResponse> call, Response<CommentCountResponse> response) {
                 CommentCountResponse commentCountResponse = response.body();
                 if (commentCountResponse.getErrorCode().equals("0")){
-                    comment.setText(commentCountResponse.getComment_count()+" comment");
+                    comment.setText(commentCountResponse.getComment_count()+" bình luận");
                 }else{
                     Dialog.instance.showMessageDialog(DetailPostActivity.this, getString(R.string.error), commentCountResponse.getMsg());
                 }

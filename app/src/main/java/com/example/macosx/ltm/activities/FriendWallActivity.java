@@ -74,13 +74,14 @@ public class FriendWallActivity extends Activity {
     public void getAllPost( ) {
         id = Integer.parseInt(getIntent().getExtras().get("id").toString());
         PostService postService = NetworkManager.getInstance().create(PostService.class);
-        String url = "receive_posts?id="+id;
+        String url = "receive_posts?id="+id+"&user_request_id="+DbContext.getInstance().getCurrentUser().getId();
         postService.getAllPosts(url).enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 PostResponse postResponse = response.body();
                 if (postResponse.getErrorCode().equals("0")) {
                     DbContext.getInstance().setListPosts(postResponse.getPosts());
+                    DbContext.getInstance().setListIsLikes(postResponse.getIsLike());
                     listPost.getAdapter().notifyDataSetChanged();
 
                 }else{
@@ -96,7 +97,7 @@ public class FriendWallActivity extends Activity {
 
         });
     }
-    public void moveToDetailPost(int id,String name,String time,String content,int like,int comment){
+    public void moveToDetailPost(int id,String name,String time,String content,int like,int comment,int islike){
         Intent intent = new Intent(this,DetailPostActivity.class);
         intent.putExtra("id",id);
         intent.putExtra("name",name);
@@ -104,6 +105,7 @@ public class FriendWallActivity extends Activity {
         intent.putExtra("time",time);
         intent.putExtra("like",like);
         intent.putExtra("comment",comment);
+        intent.putExtra("islike",islike);
         startActivity(intent);
     }
 }

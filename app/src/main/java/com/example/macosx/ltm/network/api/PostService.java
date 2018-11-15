@@ -19,6 +19,7 @@ public interface PostService {
     @FormUrlEncoded
     @POST("post")
     Call<VoidResponse> post(@Field("user_id_send") int user_id_send, @Field("user_id_receive") int user_id_receive, @Field("content") String content);
+
     @DELETE
     Call<VoidResponse> delete(@Url String url);
 

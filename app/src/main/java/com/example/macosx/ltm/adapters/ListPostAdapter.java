@@ -3,6 +3,7 @@ package com.example.macosx.ltm.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.net.Network;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -70,7 +71,7 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListPostViewHolder listPostViewHolder, int i) {
+    public void onBindViewHolder(@NonNull ListPostViewHolder listPostViewHolder, final int i) {
         final Post post = DbContext.getInstance().getListPosts().get(i);
         String namesend =Ultils.instance.getNameOfPost(post.getUser_id_send());
         String namereceive =Ultils.instance.getNameOfPost(post.getUser_id_receive());
@@ -85,14 +86,20 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
         listPostViewHolder.content.setText(post.getContent());
         listPostViewHolder.likeCount.setText(String.valueOf( post.getLike_count()));
         listPostViewHolder.commentCount.setText(String.valueOf( post.getComment_count()));
+        if (DbContext.getInstance().getListIsLikes().get(i) == 1){
+            listPostViewHolder.likeCount.setTextColor(Color.BLUE);
+        }else{
+            listPostViewHolder.likeCount.setTextColor(Color.parseColor("#808080"));
+        }
+
         final String finalName = name;
         listPostViewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (FriendWallActivity.instance!= null){
-                    FriendWallActivity.instance.moveToDetailPost(post.getId(), finalName,post.getCreate_time(),post.getContent(),post.getLike_count(),post.getComment_count());
+                    FriendWallActivity.instance.moveToDetailPost(post.getId(), finalName,post.getCreate_time(),post.getContent(),post.getLike_count(),post.getComment_count(),DbContext.getInstance().getListIsLikes().get(i));
                 }else{
-                    Home.instance.moveToDetailPost(post.getId(), finalName,post.getCreate_time(),post.getContent(),post.getLike_count(),post.getComment_count());
+                    Home.instance.moveToDetailPost(post.getId(), finalName,post.getCreate_time(),post.getContent(),post.getLike_count(),post.getComment_count(),DbContext.getInstance().getListIsLikes().get(i));
                 }
             }
         });
@@ -117,7 +124,7 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 PostService postService = NetworkManager.getInstance().create(PostService.class);
-                                postService.delete("delete_post?id=" + post.getId()).enqueue(new Callback<VoidResponse>() {
+                                postService.delete("delete_post?id=" + post.getId()+"&user_delete_id="+DbContext.getInstance().getCurrentUser().getId()).enqueue(new Callback<VoidResponse>() {
                                     @Override
                                     public void onResponse(Call<VoidResponse> call, Response<VoidResponse> response) {
                                         VoidResponse voidResponse = response.body();

@@ -23,11 +23,15 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import com.example.macosx.ltm.R;
 import com.example.macosx.ltm.database.DbContext;
+import com.example.macosx.ltm.database.models.Notification;
+import com.example.macosx.ltm.database.models.User;
 import com.example.macosx.ltm.fragments.tab.BottomNavigationTabType;
 import com.example.macosx.ltm.fragments.tab.FriendTab;
 import com.example.macosx.ltm.fragments.tab.HomeTab;
 import com.example.macosx.ltm.fragments.tab.NotificationTab;
 import com.example.macosx.ltm.network.NetworkManager;
+import com.example.macosx.ltm.network.Socket;
+import com.example.macosx.ltm.network.SocketAsyncTask;
 import com.example.macosx.ltm.network.api.LoginService;
 import com.example.macosx.ltm.network.api.LogoutService;
 import com.example.macosx.ltm.network.response.LoginResponse;
@@ -36,9 +40,15 @@ import com.example.macosx.ltm.ultils.Constant;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import tech.gusavila92.websocketclient.WebSocketClient;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -50,12 +60,83 @@ public class Home extends Activity {
     FrameLayout contentView;
     BottomNavigationTabType currentTab = BottomNavigationTabType.HOMETAB;
     private static final String TAG = "HOME";
+    WebSocketClient webSocketClient;
     public static Home instance;
+    private HomeTab homeTab;
+    private FriendTab friendTab;
+    private NotificationTab notificationTab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        homeTab = new HomeTab();
+        friendTab = new FriendTab();
+        notificationTab = new NotificationTab();
         setupUI();
+        createWebSocketClient();
+    }
+    private void createWebSocketClient() {
+        URI uri;
+        try {
+            uri = new URI(Constant.BASE_URL_SOCKET);
+        }
+        catch (URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        webSocketClient = new WebSocketClient(uri) {
+            @Override
+            public void onOpen() {
+                System.out.println("onOpen");
+                webSocketClient.send(""+DbContext.getInstance().getCurrentUser().getId());
+            }
+
+            @Override
+            public void onTextReceived(String message) {
+                if (DetailPostActivity.instance!=null){
+                    DetailPostActivity.instance.getListComments();
+                    DetailPostActivity.instance.updateComment();
+                    DetailPostActivity.instance.updateLike();
+
+                }
+                HomeTab.instance.getAllPost(Home.this,HomeTab.instance.id);
+                if (NotificationTab.instance != null) NotificationTab.instance.getAllNoti();
+                if (FriendWallActivity.instance != null) FriendWallActivity.instance.getAllPost();
+                if (FriendTab.instance != null) FriendTab.instance.getFriends(FriendTab.instance.getContext());
+            }
+
+            @Override
+            public void onBinaryReceived(byte[] data) {
+                System.out.println("onBinaryReceived");
+            }
+
+            @Override
+            public void onPingReceived(byte[] data) {
+                System.out.println("onPingReceived");
+            }
+
+            @Override
+            public void onPongReceived(byte[] data) {
+                System.out.println("onPongReceived");
+            }
+
+            @Override
+            public void onException(Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            @Override
+            public void onCloseReceived() {
+                System.out.println("onCloseReceived");
+            }
+        };
+
+        webSocketClient.setConnectTimeout(10000);
+//        webSocketClient.addHeader("Origin", "http://developer.example.com");
+        webSocketClient.enableAutomaticReconnection(2000);
+        webSocketClient.connect();
     }
     private void setupUI(){
 
@@ -83,7 +164,7 @@ public class Home extends Activity {
                         break;
                     default:
                         moveTabScreens(BottomNavigationTabType.FRIENDTAB);
-                        break;
+                           break;
                 }
             }
 
@@ -97,21 +178,23 @@ public class Home extends Activity {
 
             }
         });
+//        bottomTabar.selectTab(0);
+
     }
     private void moveTabScreens(BottomNavigationTabType tabType){
         Fragment fragment;
         switch (tabType){
             case HOMETAB:
                 currentTab = BottomNavigationTabType.HOMETAB;
-                fragment = new HomeTab();
+                fragment = homeTab;
                 break;
             case NOTIFICATIONTAB:
                 currentTab = BottomNavigationTabType.NOTIFICATIONTAB;
-                fragment = new NotificationTab();
+                fragment = notificationTab;
                 break;
             default:
                 currentTab = BottomNavigationTabType.FRIENDTAB;
-                fragment = new FriendTab();
+                fragment = friendTab;
                 break;
         }
 
@@ -124,31 +207,7 @@ public class Home extends Activity {
     protected void onResume() {
         super.onResume();
         instance = this;
-        AsyncHttpClient.getDefaultInstance().websocket(String.format("%s%s%s","ws://",Constant.BASE_URL,"social_network"), null, new AsyncHttpClient.WebSocketConnectCallback() {
-            @Override
-            public void onCompleted(Exception ex, WebSocket webSocket) {
-                if (ex != null) {
-                    ex.printStackTrace();
-                    return;
-                }
 
-
-
-                webSocket.setStringCallback(new WebSocket.StringCallback() {
-                    public void onStringAvailable(String s) {
-                        if (DetailPostActivity.instance!=null){
-                            DetailPostActivity.instance.getListComments();
-                            DetailPostActivity.instance.updateComment();
-                            DetailPostActivity.instance.updateLike();
-                            HomeTab.instance.getAllPost(Home.this,HomeTab.instance.id);
-                            NotificationTab.instance.getAllNoti();
-                        }
-                    }
-                });
-
-                webSocket.send(""+DbContext.getInstance().getCurrentUser().getId());
-            }
-        });
 
 
     }
@@ -178,6 +237,8 @@ public class Home extends Activity {
             public void onResponse(Call<VoidResponse> call, Response<VoidResponse> response) {
                 VoidResponse logoutResponse = response.body();
                 if (logoutResponse.getErrorCode().equals("0")){
+//                    Home.this.webSocket.close();
+                    DbContext.getInstance().setListFriends(new ArrayList<User>());
                    finish();
                 }else{
                     com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(Home.this,getString(R.string.error),logoutResponse.getMsg());
@@ -193,7 +254,7 @@ public class Home extends Activity {
         });
     }
 
-    public void moveToDetailPost(int id,String name,String time,String content,int like,int comment){
+    public void moveToDetailPost(int id,String name,String time,String content,int like,int comment,int islike){
         Intent intent = new Intent(this,DetailPostActivity.class);
         intent.putExtra("id",id);
         intent.putExtra("name",name);
@@ -201,6 +262,7 @@ public class Home extends Activity {
         intent.putExtra("time",time);
         intent.putExtra("like",like);
         intent.putExtra("comment",comment);
+        intent.putExtra("islike",islike);
         startActivity(intent);
     }
 

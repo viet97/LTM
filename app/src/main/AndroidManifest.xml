@@ -22,7 +22,8 @@
         <activity android:name=".activities.Home" />
         <activity android:name=".activities.PostStatus" />
         <activity android:name=".activities.FriendWallActivity" />
-        <activity android:name=".activities.DetailPostActivity"></activity>
+        <activity android:name=".activities.DetailPostActivity" />
+        <activity android:name=".activities.Register"></activity>
     </application>
 
 </manifest>

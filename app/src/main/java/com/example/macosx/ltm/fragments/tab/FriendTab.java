@@ -65,7 +65,7 @@ public class FriendTab extends Fragment {
 
     }
 
-    private void getFriends(final Context context) {
+    public void getFriends(final Context context) {
         FriendService friendService = NetworkManager.getInstance().create(FriendService.class);
         String url = "friends?id="+DbContext.getInstance().getCurrentUser().getId();
         friendService.getAllFriends(url).enqueue(new Callback<FriendResponse>() {

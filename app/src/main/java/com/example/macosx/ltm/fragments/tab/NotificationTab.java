@@ -69,6 +69,8 @@ public class NotificationTab extends Fragment {
                 NotificationResponse notificationResponse = response.body();
                 if (notificationResponse.getErrorCode().equals("0")) {
                     DbContext.getInstance().setListNotifications(notificationResponse.getNotification());
+                    DbContext.getInstance().setListNotiPosts(notificationResponse.getPost());
+                    DbContext.getInstance().setListNotiIsLike(notificationResponse.getIsLike());
                     listNoti.getAdapter().notifyDataSetChanged();
 
                 }else{

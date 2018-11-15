@@ -87,7 +87,7 @@ public class ListCommentAdapter extends RecyclerView.Adapter<ListCommentAdapter.
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
                                     CommentService commentService = NetworkManager.getInstance().create(CommentService.class);
-                                    commentService.delete("delete_comment?id=" + comment.getId()+"&post_id=" + DetailPostActivity.instance.getIntent().getExtras().get("id").toString()).enqueue(new Callback<VoidResponse>() {
+                                    commentService.delete("delete_comment?id=" + comment.getId()+"&post_id=" + DetailPostActivity.instance.getIntent().getExtras().get("id").toString()+"&user_delete_id="+DbContext.getInstance().getCurrentUser().getId()).enqueue(new Callback<VoidResponse>() {
                                         @Override
                                         public void onResponse(Call<VoidResponse> call, Response<VoidResponse> response) {
                                             VoidResponse voidResponse = response.body();

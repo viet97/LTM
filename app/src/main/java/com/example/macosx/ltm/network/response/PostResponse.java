@@ -9,11 +9,13 @@ public class PostResponse {
     String errorCode;
     String msg;
     ArrayList<Post> posts;
+    ArrayList<Integer> isLike;
 
-    public PostResponse(String errorCode, String msg, ArrayList<Post> posts) {
+    public PostResponse(String errorCode, String msg, ArrayList<Post> posts, ArrayList<Integer> isLike) {
         this.errorCode = errorCode;
         this.msg = msg;
         this.posts = posts;
+        this.isLike = isLike;
     }
 
     public String getErrorCode() {
@@ -38,5 +40,13 @@ public class PostResponse {
 
     public void setPosts(ArrayList<Post> posts) {
         this.posts = posts;
+    }
+
+    public ArrayList<Integer> getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(ArrayList<Integer> isLike) {
+        this.isLike = isLike;
     }
 }
