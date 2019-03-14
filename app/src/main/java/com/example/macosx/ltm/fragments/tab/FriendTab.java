@@ -68,25 +68,27 @@ public class FriendTab extends Fragment {
     public void getFriends(final Context context) {
         FriendService friendService = NetworkManager.getInstance().create(FriendService.class);
         String url = "friends?id="+DbContext.getInstance().getCurrentUser().getId();
-        friendService.getAllFriends(url).enqueue(new Callback<FriendResponse>() {
-            @Override
-            public void onResponse(Call<FriendResponse> call, Response<FriendResponse> response) {
-                FriendResponse friendResponse = response.body();
-                if (friendResponse.getErrorCode().equals("0")) {
-                    DbContext.getInstance().setListFriends(friendResponse.getListFriends());
-                    listFriends.getAdapter().notifyDataSetChanged();
+        if(listFriends!= null) {
+            friendService.getAllFriends(url).enqueue(new Callback<FriendResponse>() {
+                @Override
+                public void onResponse(Call<FriendResponse> call, Response<FriendResponse> response) {
+                    FriendResponse friendResponse = response.body();
+                    if (friendResponse.getErrorCode().equals("0")) {
+                        DbContext.getInstance().setListFriends(friendResponse.getListFriends());
+                        listFriends.getAdapter().notifyDataSetChanged();
 
-                }else{
-                    Dialog.instance.showMessageDialog(context,context.getString(R.string.error),friendResponse.getMsg());
+                    } else {
+                        Dialog.instance.showMessageDialog(context, context.getString(R.string.error), friendResponse.getMsg());
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<FriendResponse> call, Throwable throwable) {
-                Dialog.instance.showMessageDialog(context,context.getString(R.string.error),context.getString(R.string.failur_message));
+                @Override
+                public void onFailure(Call<FriendResponse> call, Throwable throwable) {
+                    Dialog.instance.showMessageDialog(context, context.getString(R.string.error), context.getString(R.string.failur_message));
 
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override
