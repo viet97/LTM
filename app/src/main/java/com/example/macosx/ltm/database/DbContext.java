@@ -1,6 +1,7 @@
 package com.example.macosx.ltm.database;
 
 import com.example.macosx.ltm.database.models.Comment;
+import com.example.macosx.ltm.database.models.Message;
 import com.example.macosx.ltm.database.models.Notification;
 import com.example.macosx.ltm.database.models.Post;
 import com.example.macosx.ltm.database.models.User;
@@ -16,6 +17,7 @@ public class DbContext {
     private ArrayList<Notification> listNotifications;
     private ArrayList<Integer> listIsLikes;
     private ArrayList<Post> listNotiPosts;
+    private ArrayList<Message> listMessages;
     private ArrayList<Integer> listNotiIsLike;
     private User currentUser;
     DbContext(){
@@ -27,6 +29,11 @@ public class DbContext {
          listIsLikes     = new ArrayList<>();
          listNotiPosts     = new ArrayList<>();
         listNotiIsLike     = new ArrayList<>();
+        listMessages = new ArrayList<>();
+        listMessages.add(new Message(0,0,"hello","user","22:02"));
+        listMessages.add(new Message(0,1,"hello","user","22:02"));
+        listMessages.add(new Message(0,1,"how are you","user","22:02"));
+        listMessages.add(new Message(0,0,"fine","user","22:02"));
     }
 
     public ArrayList<Integer> getListNotiIsLike() {
@@ -95,5 +102,13 @@ public class DbContext {
 
     public void setListComments(ArrayList<Comment> listComments) {
         this.listComments = listComments;
+    }
+
+    public ArrayList<Message> getListMessages() {
+        return listMessages;
+    }
+
+    public void setListMessages(ArrayList<Message> listMessages) {
+        this.listMessages = listMessages;
     }
 }
