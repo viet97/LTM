@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.macosx.ltm.R;
@@ -31,6 +32,7 @@ import com.example.macosx.ltm.network.api.PostService;
 import com.example.macosx.ltm.network.response.FriendResponse;
 import com.example.macosx.ltm.network.response.PostResponse;
 import com.example.macosx.ltm.ultils.Dialog;
+import com.example.macosx.ltm.ultils.Ultils;
 import com.weiwangcn.betterspinner.library.BetterSpinner;
 
 
@@ -63,6 +65,7 @@ public class HomeTab extends Fragment {
     TextView pickImage;
     TextView name;
     LockableScrollView lockableScrollView;
+    ImageView avatar;
     BetterSpinner spinner;
     private static final String[] TYPEPOST = new String[] {
             "Bài viết bản thân","Bài viết bạn bè"
@@ -74,6 +77,9 @@ public class HomeTab extends Fragment {
     }
 
     private void setupUI(final View view) {
+        avatar = view.findViewById(R.id.avatar);
+        Ultils.instance.setImageText(avatar,DbContext.getInstance().getCurrentUser().getName().charAt(0));
+
         name = view.findViewById(R.id.name);
         name.setText(DbContext.getInstance().getCurrentUser().getName());
 

@@ -16,6 +16,7 @@ import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.database.models.Notification;
 import com.example.macosx.ltm.database.models.User;
 import com.example.macosx.ltm.fragments.tab.FriendTab;
+import com.example.macosx.ltm.ultils.Ultils;
 
 import org.w3c.dom.Text;
 
@@ -49,6 +50,7 @@ public class ListFriendAdapter extends RecyclerView.Adapter<ListFriendAdapter.Li
     @Override
     public void onBindViewHolder(@NonNull ListFriendViewHolder listFriendViewHolder, int i) {
         final User friend = DbContext.getInstance().getListFriends().get(i);
+        Ultils.instance.setImageText(listFriendViewHolder.avatar,friend.getName().charAt(0));
         listFriendViewHolder.name.setText(friend.getName());
         if (friend.getStatus() == 1) {
             listFriendViewHolder.online.setVisibility(View.VISIBLE);

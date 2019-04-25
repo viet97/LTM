@@ -47,12 +47,13 @@ public class ListNotiAdapter extends RecyclerView.Adapter<ListNotiAdapter.ListNo
 
     @Override
     public void onBindViewHolder(@NonNull ListNotiViewHolder listNotiViewHolder, final int i) {
+        final Post post = DbContext.getInstance().getListNotiPosts().get(i);
+        Ultils.instance.setImageText(listNotiViewHolder.avatar,Ultils.instance.getNameOfPost(post.getUser_id_send()).charAt(0));
         listNotiViewHolder.content.setText(DbContext.getInstance().getListNotifications().get(i).getContent());
         listNotiViewHolder.time.setText(DbContext.getInstance().getListNotifications().get(i).getCreate_time());
         listNotiViewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Post post = DbContext.getInstance().getListNotiPosts().get(i);
                 int isLike = DbContext.getInstance().getListNotiIsLike().get(i);
                 String name = "";
                 String namesend =Ultils.instance.getNameOfPost(post.getUser_id_send());

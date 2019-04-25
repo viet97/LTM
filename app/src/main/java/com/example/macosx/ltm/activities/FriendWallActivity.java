@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import com.example.macosx.ltm.network.NetworkManager;
 import com.example.macosx.ltm.network.api.PostService;
 import com.example.macosx.ltm.network.response.PostResponse;
 import com.example.macosx.ltm.ultils.Dialog;
+import com.example.macosx.ltm.ultils.Ultils;
 
 import java.util.ArrayList;
 
@@ -32,7 +34,8 @@ public class FriendWallActivity extends Activity {
         public RecyclerView listPost;
         private ArrayList<Post> listPostData;
         EditText statusPost;
-        TextView pickImage;
+        TextView name;
+        ImageView avatar;
         public static FriendWallActivity instance ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,13 @@ public class FriendWallActivity extends Activity {
     }
 
     private void setupUI() {
+
+        avatar = findViewById(R.id.avatar);
+        Ultils.instance.setImageText(avatar,Ultils.instance.getNameOfPost(Integer.parseInt(getIntent().getExtras().get("id").toString())).charAt(0));
+
+        name = findViewById(R.id.name);
+        name.setText(Ultils.instance.getNameOfPost(Integer.parseInt(getIntent().getExtras().get("id").toString())));
+
         listPostData = new ArrayList<>();
 
         listPost = findViewById(R.id.list_post);

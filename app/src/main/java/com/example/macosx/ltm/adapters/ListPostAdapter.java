@@ -30,6 +30,7 @@ import com.example.macosx.ltm.ultils.Ultils;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,7 +48,7 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
         private RelativeLayout container;
         public ListPostViewHolder(@NonNull View itemView) {
             super(itemView);
-            avatar =itemView.findViewById(R.id.avatar);
+            avatar =itemView.findViewById(R.id.post_user_avatar);
             name =itemView.findViewById(R.id.name);
             time =itemView.findViewById(R.id.time);
             content =itemView.findViewById(R.id.content);
@@ -86,6 +87,8 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
         listPostViewHolder.content.setText(post.getContent());
         listPostViewHolder.likeCount.setText(String.valueOf( post.getLike_count()));
         listPostViewHolder.commentCount.setText(String.valueOf( post.getComment_count()));
+        Ultils.instance.setImageText(listPostViewHolder.avatar,Ultils.instance.getNameOfPost(post.getUser_id_send()).charAt(0));
+
         if (DbContext.getInstance().getListIsLikes().get(i) == 1){
             listPostViewHolder.likeCount.setTextColor(Color.BLUE);
         }else{

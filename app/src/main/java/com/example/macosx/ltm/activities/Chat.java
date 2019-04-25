@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.macosx.ltm.R;
 import com.example.macosx.ltm.adapters.ListMessageAdapter;
@@ -21,6 +22,7 @@ import com.example.macosx.ltm.network.response.ChatResponse;
 import com.example.macosx.ltm.network.response.FriendResponse;
 import com.example.macosx.ltm.network.response.VoidResponse;
 import com.example.macosx.ltm.ultils.Dialog;
+import com.example.macosx.ltm.ultils.Ultils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,13 +36,26 @@ public class Chat extends Activity {
     private static final String TAG = "CHAT";
     private RecyclerView listMessage;
     private EditText input;
+    private TextView name;
     private ImageButton send;
+    ImageButton back;
     public static Chat instance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        name = findViewById(R.id.name);
+        name.setText(Ultils.instance.getNameOfPost(Integer.parseInt(getIntent().getExtras().get("id_receive").toString())));
 
         input = findViewById(R.id.input);
         send = findViewById(R.id.send_message);

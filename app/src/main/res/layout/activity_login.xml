@@ -27,6 +27,7 @@
         android:layout_height="44dp"
         android:hint="@string/username_login_placeholder"
         android:textColorHint="@color/white"
+        android:textColor="@color/white"
         />
     <View
         android:id="@+id/under_username_line"
@@ -54,6 +55,7 @@
         android:layout_height="44dp"
         android:hint="@string/password_login_placeholder"
         android:textColorHint="@color/white"
+        android:textColor="@color/white"
         />
     <View
         android:id="@+id/under_password_line"

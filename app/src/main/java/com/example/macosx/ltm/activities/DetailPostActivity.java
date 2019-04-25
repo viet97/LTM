@@ -29,6 +29,7 @@ import com.example.macosx.ltm.network.response.FriendResponse;
 import com.example.macosx.ltm.network.response.LikeCountResponse;
 import com.example.macosx.ltm.network.response.VoidResponse;
 import com.example.macosx.ltm.ultils.Dialog;
+import com.example.macosx.ltm.ultils.Ultils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,7 +63,10 @@ public class DetailPostActivity extends Activity {
         content = findViewById(R.id.content);
         comment = findViewById(R.id.comment);
 
-        if (getIntent().getExtras().get("name")!= null) name.setText(getIntent().getExtras().get("name").toString());
+        if (getIntent().getExtras().get("name")!= null) {
+            name.setText(getIntent().getExtras().get("name").toString());
+            Ultils.instance.setImageText(avatar,getIntent().getExtras().get("name").toString().charAt(0));
+        }
         if (getIntent().getExtras().get("time")!= null) time.setText(getIntent().getExtras().get("time").toString());
         if (getIntent().getExtras().get("content")!= null) content.setText(getIntent().getExtras().get("content").toString());
         if (getIntent().getExtras().get("like")!= null) {

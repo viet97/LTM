@@ -67,6 +67,7 @@ public class ListCommentAdapter extends RecyclerView.Adapter<ListCommentAdapter.
     @Override
     public void onBindViewHolder(@NonNull ListCommentViewHolder listCommentViewHolder, final int i) {
         final Comment comment = DbContext.getInstance().getListComments().get(i);
+        Ultils.instance.setImageText(listCommentViewHolder.avatar,Ultils.instance.getNameOfPost(comment.getUser_comment_id()).charAt(0));
         listCommentViewHolder.content.setText(comment.getContent());
         listCommentViewHolder.time.setText(comment.getCreate_time());
         listCommentViewHolder.name.setText(Ultils.instance.getNameOfPost(comment.getUser_comment_id()));

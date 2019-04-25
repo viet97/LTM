@@ -2,6 +2,7 @@ package com.example.macosx.ltm.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Bundle;
@@ -47,6 +48,17 @@ public class Login extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setupUI();
+        checkLogin();
+    }
+
+    private void checkLogin(){
+        String username = getSharedPreferences("author",MODE_PRIVATE).getString("username","");
+        String password = getSharedPreferences("author",MODE_PRIVATE).getString("password","");
+        if (!username.equals("") && !password.equals("")){
+            this.username.setText(username);
+            this.password.setText(password);
+            this.loginButton.performClick();
+        }
     }
 
     private void setupUI(){
@@ -82,6 +94,11 @@ public class Login extends Activity implements View.OnClickListener {
                             LoginResponse loginResponse = response.body();
                             if (loginResponse.getErrorCode().equals("0")){
                                 DbContext.getInstance().setCurrentUser(loginResponse.getUser());
+                                SharedPreferences.Editor editor=  getSharedPreferences("author",MODE_PRIVATE).edit();
+                                editor.putString("username",username.getText().toString());
+                                editor.putString("password",password.getText().toString());
+
+                                editor.apply();
                                 handle1.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {

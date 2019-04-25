@@ -8,6 +8,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
@@ -148,9 +149,9 @@ public class Home extends Activity {
         bottomTabar =  findViewById(R.id.bottom_navigation);
 
         bottomTabar
-                .addItem(new BottomNavigationItem(R.drawable.home, "123123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
-                .addItem(new BottomNavigationItem(R.drawable.notification, "123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
-                .addItem(new BottomNavigationItem(R.drawable.friend, "123")).setActiveColor(R.color.black).setInActiveColor(R.color.gray)
+                .addItem(new BottomNavigationItem(R.drawable.home, "123123")).setActiveColor(R.color.cpb_blue).setInActiveColor(R.color.gray)
+                .addItem(new BottomNavigationItem(R.drawable.notification, "123")).setActiveColor(R.color.cpb_blue).setInActiveColor(R.color.gray)
+                .addItem(new BottomNavigationItem(R.drawable.friend, "123")).setActiveColor(R.color.cpb_blue).setInActiveColor(R.color.gray)
                 .initialise();
 
         bottomTabar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
@@ -240,7 +241,10 @@ public class Home extends Activity {
                 if (logoutResponse.getErrorCode().equals("0")){
 //                    Home.this.webSocket.close();
                     DbContext.getInstance().setListFriends(new ArrayList<User>());
-                   finish();
+                    SharedPreferences.Editor editor=  getSharedPreferences("author",MODE_PRIVATE).edit();
+                    editor.clear();
+                    editor.apply();
+                    finish();
                 }else{
                     com.example.macosx.ltm.ultils.Dialog.instance.showMessageDialog(Home.this,getString(R.string.error),logoutResponse.getMsg());
                 }
