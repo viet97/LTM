@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.macosx.ltm.R;
+import com.example.macosx.ltm.activities.Chat;
 import com.example.macosx.ltm.activities.FriendWallActivity;
 import com.example.macosx.ltm.activities.Home;
 import com.example.macosx.ltm.adapters.ListFriendAdapter;
@@ -120,6 +121,13 @@ public class FriendTab extends Fragment {
         Intent intent = new Intent(this.getContext(),FriendWallActivity.class);
         intent.putExtra("id",id);
        startActivity(intent);
+    }
+
+    public void moveToChat(int id_send, int id_receive){
+        Intent intent = new Intent(this.getContext(), Chat.class);
+        intent.putExtra("id_send",id_send);
+        intent.putExtra("id_receive",id_receive);
+        startActivity(intent);
     }
     /**
      * This interface must be implemented by activities that contain this

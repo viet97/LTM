@@ -12,14 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".activities.Chat">
+
+        </activity>
+        <activity android:name=".activities.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".activities.Login">
-
         </activity>
         <activity android:name=".activities.Splash" />
         <activity android:name=".activities.Home" />

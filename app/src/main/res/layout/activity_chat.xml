@@ -54,7 +54,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/message"
+                android:id="@+id/input"
                 android:textColor="@color/colorB"
                 android:imeOptions="flagNoExtractUi"
                 android:textCursorDrawable="@null"

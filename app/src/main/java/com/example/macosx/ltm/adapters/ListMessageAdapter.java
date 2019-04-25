@@ -44,13 +44,14 @@ import retrofit2.Response;
 public class ListMessageAdapter extends RecyclerView.Adapter<ListMessageAdapter.ListMessageViewHolder> {
     private static final String TAG = "LISTMESSAGEADAPTER";
 
-    public class ListMessageViewHolder extends RecyclerView.ViewHolder{
-    TextView timeSend;
-    TextView timeReceive;
-    TextView contentSend;
-    TextView contentReceive;
-    RelativeLayout sendLayout;
-    RelativeLayout receiveLayout;
+    public class ListMessageViewHolder extends RecyclerView.ViewHolder {
+        TextView timeSend;
+        TextView timeReceive;
+        TextView contentSend;
+        TextView contentReceive;
+        RelativeLayout sendLayout;
+        RelativeLayout receiveLayout;
+
         public ListMessageViewHolder(@NonNull View itemView) {
             super(itemView);
             timeReceive = itemView.findViewById(R.id.time_receive);
@@ -65,22 +66,22 @@ public class ListMessageAdapter extends RecyclerView.Adapter<ListMessageAdapter.
     @NonNull
     @Override
     public ListMessageViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.message_item,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.message_item, viewGroup, false);
         return new ListMessageViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ListMessageViewHolder listCommentViewHolder, final int i) {
         Message message = DbContext.getInstance().getListMessages().get(i);
-        if(message.type == 0){
+        if (message.id_send == DbContext.getInstance().getCurrentUser().getId()) {
             listCommentViewHolder.sendLayout.setVisibility(View.VISIBLE);
             listCommentViewHolder.receiveLayout.setVisibility(View.INVISIBLE);
             listCommentViewHolder.contentSend.setText(message.getContent());
-            Log.d(TAG, "onBindViewHolder: "+listCommentViewHolder.contentSend.getText().toString());
+            Log.d(TAG, "onBindViewHolder: " + listCommentViewHolder.contentSend.getText().toString());
 
             listCommentViewHolder.timeSend.setText(message.getTime());
-        }else{
-            Log.d(TAG, "onBindViewHolder: "+listCommentViewHolder.contentSend.getText().toString());
+        } else {
+            Log.d(TAG, "onBindViewHolder: " + listCommentViewHolder.contentSend.getText().toString());
 
             listCommentViewHolder.receiveLayout.setVisibility(View.VISIBLE);
             listCommentViewHolder.sendLayout.setVisibility(View.INVISIBLE);
@@ -93,7 +94,7 @@ public class ListMessageAdapter extends RecyclerView.Adapter<ListMessageAdapter.
     @Override
     public int getItemCount() {
 
-        Log.d(TAG, "getItemCount: "+ DbContext.getInstance().getListMessages().size());
+        Log.d(TAG, "getItemCount: " + DbContext.getInstance().getListMessages().size());
         return DbContext.getInstance().getListMessages().size();
     }
 

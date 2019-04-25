@@ -20,20 +20,16 @@ public class DbContext {
     private ArrayList<Message> listMessages;
     private ArrayList<Integer> listNotiIsLike;
     private User currentUser;
-    DbContext(){
-            listFriends = new ArrayList<>();
-            currentUser = new User();
-            listPosts = new ArrayList<>();
-            listComments = new ArrayList<>();
-            listNotifications     = new ArrayList<>();
-         listIsLikes     = new ArrayList<>();
-         listNotiPosts     = new ArrayList<>();
-        listNotiIsLike     = new ArrayList<>();
+    DbContext() {
+        listFriends = new ArrayList<>();
+        currentUser = new User();
+        listPosts = new ArrayList<>();
+        listComments = new ArrayList<>();
+        listNotifications = new ArrayList<>();
+        listIsLikes = new ArrayList<>();
+        listNotiPosts = new ArrayList<>();
+        listNotiIsLike = new ArrayList<>();
         listMessages = new ArrayList<>();
-        listMessages.add(new Message(0,0,"hello","user","22:02"));
-        listMessages.add(new Message(0,1,"hello","user","22:02"));
-        listMessages.add(new Message(0,1,"how are you","user","22:02"));
-        listMessages.add(new Message(0,0,"fine","user","22:02"));
     }
 
     public ArrayList<Integer> getListNotiIsLike() {
