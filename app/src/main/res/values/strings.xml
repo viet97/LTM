@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LTM</string>
+    <string name="app_name">Social NetWork</string>
     <string name="username_login_placeholder">Tài khoản</string>
     <string name="password_login_placeholder">Mật khẩu</string>
     <string name="login_button">Đăng nhập</string>
