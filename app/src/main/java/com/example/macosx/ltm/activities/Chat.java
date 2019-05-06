@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.macosx.ltm.R;
 import com.example.macosx.ltm.adapters.ListMessageAdapter;
+import com.example.macosx.ltm.customviews.CustomRecyvleView;
 import com.example.macosx.ltm.database.DbContext;
 import com.example.macosx.ltm.network.NetworkManager;
 import com.example.macosx.ltm.network.api.ChatService;
@@ -32,15 +33,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Chat extends Activity {
+public class Chat extends Activity implements CustomRecyvleView.ScrollViewListener {
+
     private static final String TAG = "CHAT";
-    private RecyclerView listMessage;
+    private CustomRecyvleView listMessage;
     private EditText input;
     private TextView name;
     private ImageButton send;
     ImageButton back;
     public static Chat instance = null;
-
+    public boolean isAtBottom = false;
+    public boolean isSending = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,10 +67,11 @@ public class Chat extends Activity {
         listMessage.setAdapter(new ListMessageAdapter());
         listMessage.setLayoutManager(new LinearLayoutManager(this));
         listMessage.setHasFixedSize(true);
-
+        listMessage.setScrollViewListener(this);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isSending = true;
                 int id_receive = 0;
                 if (getIntent().getExtras().get("id_receive") != null) {
                     id_receive = Integer.parseInt(getIntent().getExtras().get("id_receive").toString());
@@ -98,8 +102,8 @@ public class Chat extends Activity {
                 }
             }
         });
-
-        getMessages();
+        isSending = true;
+        getMessages(true);
 
     }
 
@@ -119,7 +123,7 @@ public class Chat extends Activity {
         listMessage.scrollToPosition(DbContext.getInstance().getListMessages().size() - 1);
     }
 
-    public void getMessages() {
+    public void getMessages(final boolean isSend) {
         int id_receive = 0;
         if (getIntent().getExtras().get("id_receive") != null) {
             id_receive = Integer.parseInt(getIntent().getExtras().get("id_receive").toString());
@@ -134,7 +138,10 @@ public class Chat extends Activity {
                     if (chatResponse.getErrorCode().equals("0")) {
                         DbContext.getInstance().setListMessages(chatResponse.getMessages());
                         listMessage.getAdapter().notifyDataSetChanged();
-                        scrollToBottom();
+                        if(isSending || isAtBottom) {
+                            scrollToBottom();
+                            isSending = false;
+                        }
                     } else {
                         Dialog.instance.showMessageDialog(Chat.this
                                 , getString(R.string.error), chatResponse.getMsg());
@@ -150,4 +157,16 @@ public class Chat extends Activity {
         }
     }
 
+    @Override
+    public void onScrollChanged(CustomRecyvleView scrollView, int x, int y, int oldx, int oldy) {
+        View view = (View) scrollView.getChildAt(scrollView.getChildCount() - 1);
+        int diff = (view.getBottom() - (scrollView.getHeight() + scrollView.getScrollY()));
+
+        // if diff is zero, then the bottom has been reached
+        if (diff == 0) {
+            isAtBottom = true;
+        }else{
+            isAtBottom = false;
+        }
+    }
 }

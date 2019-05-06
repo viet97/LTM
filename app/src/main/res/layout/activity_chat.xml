@@ -31,7 +31,7 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <com.example.macosx.ltm.customviews.CustomRecyvleView
         android:layout_marginBottom="8dp"
         android:layout_below="@id/header"
         android:layout_above="@id/footer"
@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+    </com.example.macosx.ltm.customviews.CustomRecyvleView>
     <LinearLayout
         android:id="@+id/footer"
         android:background="@color/colorF"

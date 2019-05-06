@@ -87,7 +87,12 @@ public class ListPostAdapter extends RecyclerView.Adapter<ListPostAdapter.ListPo
         listPostViewHolder.content.setText(post.getContent());
         listPostViewHolder.likeCount.setText(String.valueOf( post.getLike_count()));
         listPostViewHolder.commentCount.setText(String.valueOf( post.getComment_count()));
-        Ultils.instance.setImageText(listPostViewHolder.avatar,Ultils.instance.getNameOfPost(post.getUser_id_send()).charAt(0));
+        try{
+            Ultils.instance.setImageText(listPostViewHolder.avatar,Ultils.instance.getNameOfPost(post.getUser_id_send()).charAt(0));
+
+        }catch (Exception e){
+
+        }
 
         if (DbContext.getInstance().getListIsLikes().get(i) == 1){
             listPostViewHolder.likeCount.setTextColor(Color.BLUE);

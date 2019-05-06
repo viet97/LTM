@@ -106,7 +106,7 @@ public class Home extends Activity {
                 if (NotificationTab.instance != null) NotificationTab.instance.getAllNoti();
                 if (FriendWallActivity.instance != null) FriendWallActivity.instance.getAllPost();
                 if (FriendTab.instance != null) FriendTab.instance.getFriends(FriendTab.instance.getContext());
-                if (Chat.instance != null) Chat.instance.getMessages();
+                if (Chat.instance != null) Chat.instance.getMessages(false);
             }
 
             @Override
